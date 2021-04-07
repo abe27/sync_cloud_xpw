@@ -354,7 +354,6 @@ class Yk:
         from bs4 import BeautifulSoup
         import os
 
-        file_name = False
         session = self.__login()
 
         docs = False
