@@ -357,18 +357,21 @@ class Yk:
         session = self.__login()
 
         docs = False
-        if session is not None:
-            if session.status_code == 200:
-                # download file
-                rq = requests.get(filelink, stream=True, verify=False,
-                                  cookies=session.cookies, allow_redirects=True)
-                docs = BeautifulSoup(rq.content, 'lxml')
+        try:
+            if session is not None:
+                if session.status_code == 200:
+                    # download file
+                    rq = requests.get(filelink, stream=True, verify=False,
+                                    cookies=session.cookies, allow_redirects=True)
+                    docs = BeautifulSoup(rq.content, 'lxml')
+
+        except Exception as ex:
+            print(ex)
+            pass
+
         
         return docs
 
-    # def __init__(self):
-    #     # self.__login()
-    #     # self.__get_link()
-    #     # self.__download()
-    #     # self.__logout()
-    #     print("Ok")
+    def __init__(self):
+        
+        print("Ok")
