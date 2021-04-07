@@ -1,0 +1,88 @@
+class SplCloud:
+    def __init__(self):
+        return None
+
+    def get_token(self):
+        import os
+        import requests
+        import urllib
+        import urllib3
+
+        token = False
+
+        url = f"http://{os.getenv('HOSTNAME')}/api/v1/login"
+        passwd = urllib.parse.quote(os.getenv('PASSWORD'))
+        payload = f"username={os.getenv('USERNAME')}&password={passwd}"
+        headers = {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
+        urllib3.disable_warnings()
+        response = requests.request("POST", url, headers=headers, data=payload)
+
+        if response.status_code == 200:
+            token = response.json()['token']
+
+        return token
+
+    def clear_token(self, token):
+        import os
+        import requests
+        import urllib3
+
+        url = f"http://{os.getenv('HOSTNAME')}/api/v1/logout"
+
+        payload = {}
+        headers = {
+            'Authorization': f'Bearer {token}'
+        }
+        urllib3.disable_warnings()
+        response = requests.request("GET", url, headers=headers, data=payload)
+
+        if response.status_code == 200:
+            return True
+
+        return False
+
+    def upload_gedi_to_cloud(self, doc):
+        import requests
+        import os
+
+        url = f"http://{os.getenv('HOSTNAME')}/api/v1/filegedi/store"
+
+        payload = {
+            'yazaki_user': doc['yazaki_id'],
+            'gedi_type': doc['gedi_type'],
+            'batch_id': doc['batch_id'],
+            'upload_at': doc['upload_date'],
+            'download': doc['download'],
+            'is_type': doc['is_type']
+        }
+
+        files = [
+            ('file_name', (doc['file_name'], open(doc['file_path'], 'rb'), 'application/octet-stream'))
+        ]
+        headers = {
+            'Authorization': f"Bearer {doc['token']}"
+        }
+
+        response = requests.request("POST", url, headers=headers, data=payload, files=files)
+        if response.status_code == 201:
+            return True
+
+        return False
+
+    def linenotify(self, msg):
+        import requests
+        import os
+
+        url = "https://notify-api.line.me/api/notify"
+
+        payload='message='+msg
+        headers = {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': f'Bearer {os.getenv("LINE_NOTIFY_TOKEN")}'
+        }
+
+        response = requests.request("POST", url, headers=headers, data=payload)
+
+        print(response.text)
