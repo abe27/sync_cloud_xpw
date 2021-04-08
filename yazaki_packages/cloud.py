@@ -59,17 +59,68 @@ class SplCloud:
         }
 
         files = [
-            ('file_name', (doc['file_name'], open(doc['file_path'], 'rb'), 'application/octet-stream'))
+            ('file_name', (doc['file_name'], open(
+                doc['file_path'], 'rb'), 'application/octet-stream'))
         ]
         headers = {
             'Authorization': f"Bearer {doc['token']}"
         }
 
-        response = requests.request("POST", url, headers=headers, data=payload, files=files)
+        response = requests.request(
+            "POST", url, headers=headers, data=payload, files=files)
         if response.status_code == 201:
             return True
 
         return False
+
+    def download_gedi(self, token):
+        import requests
+        import os
+
+        url = f"http://{os.getenv('HOSTNAME')}/api/v1/filegedi/index"
+
+        payload = {}
+        headers = {
+            'Authorization': f'Bearer {token}'
+        }
+
+        response = requests.request("GET", url, headers=headers, data=payload)
+
+        data = False
+        if response.status_code == 200:
+            data = response.json()
+
+        return data
+
+    def update_gedi_status(self, token, id, statuscode):
+        import requests
+        import os
+
+        url = f"http://{os.getenv('HOSTNAME')}/api/v1/filegedi/{id}/update"
+
+        payload = f'download={statuscode}'
+        headers = {
+            'Authorization': f'Bearer {token}',
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+
+        response = requests.request("PUT", url, headers=headers, data=payload)
+
+        status = False
+        if response.status_code == 200:
+            status = True
+        
+        return status
+
+    def get_text_file(self, url):
+        import requests
+        from bs4 import BeautifulSoup
+
+        payload={}
+        headers = {}
+
+        response = requests.request("GET", url, headers=headers, data=payload)
+        return BeautifulSoup(response.content, 'lxml')
 
     def linenotify(self, msg):
         import requests
@@ -77,7 +128,7 @@ class SplCloud:
 
         url = "https://notify-api.line.me/api/notify"
 
-        payload='message='+msg
+        payload = 'message='+msg
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
             'Authorization': f'Bearer {os.getenv("LINE_NOTIFY_TOKEN")}'
