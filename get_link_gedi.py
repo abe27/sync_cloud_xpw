@@ -25,22 +25,24 @@ if len(yazaki_link) > 0:
     for i in yazaki_link:
         docs = y.download(i.objtype, i.batchfile, i.linkfile())
         if docs != False:
-            if i.objtype == "ORDERPLAN":
-                filename = f'./data/{(i.objtype).lower()}/{i.batchid}.{(i.batchfile).upper()}'
+            filename = f'./data/{(i.objtype).lower()}/{i.batchid}.{(i.batchfile).upper()}'
 
-                # check duplicate file gedi. remove when exits.
-                if os.path.exists(filename) == True:
-                    os.remove(filename)
+            # check duplicate file gedi. remove when exits.
+            if os.path.exists(filename) == True:
+                os.remove(filename)
 
-                f = open(filename, mode='a', encoding='ascii', newline='\r\n')
-                for p in docs:
-                    f.write(p.text)
+            f = open(filename, mode='a', encoding='ascii', newline='\r\n')
+            for p in docs:
+                f.write(p.text)
 
-                f.close()
+            f.close()
         
         else:
             msg = f"Can't download {i.batchfile}!"
             cloud.linenotify(msg)
+
+    msg = f"create gedi {len(yazaki_link)} completed."
+    cloud.linenotify(msg)
 
 
 # check data on floder
@@ -84,7 +86,7 @@ while i < len(folder_target):
         cloud.clear_token(token)
         # notifies on line message
         if len(line_doc) > 0:
-            msg = f"Upload {(folder_target[i]).upper()}({len(line_doc)}) completed."
+            msg = f"Upload {(folder_target[i]).upper()}({len(line_doc)}) to XPW Online completed."
             cloud.linenotify(msg)
 
         line_doc = []
