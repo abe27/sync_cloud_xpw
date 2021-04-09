@@ -6,6 +6,7 @@ from yazaki_packages.cloud import SplCloud
 from yazaki_packages.yazaki import Yk
 
 from datetime import datetime
+from termcolor import colored
 
 import pathlib
 import sys
@@ -15,8 +16,7 @@ from dotenv import load_dotenv
 env_path = f'{pathlib.Path().absolute()}/.env'
 load_dotenv(env_path)
 
-
-print(f"start download from yazaki at: {datetime.now()}")
+print(colored(f"========== start download from yazaki at: {datetime.now().strftime('%Y%m%d %H:%I:%S')} ==========", "yellow"))
 
 # initial function
 y = Yk()
@@ -40,7 +40,6 @@ if len(yazaki_link) > 0:
                 f.write(p.text)
 
             f.close()
-            print(f"download gedi i.filetype file : {i.batchid}.{(i.batchfile).upper()}")
         
         else:
             msg = f"Can't download {i.batchfile}!"
@@ -49,9 +48,10 @@ if len(yazaki_link) > 0:
     msg = f"create gedi {len(yazaki_link)} completed."
     cloud.linenotify(msg)
 
-print(f"end download from yazaki at: {datetime.now()}")
+print(colored(f"============ end download from yazaki at: {datetime.now().strftime('%Y%m%d %H:%I:%S')} ===================", "yellow"))
 
-
+print("\n")
+print(colored("================= begin start upload to spl cloud ==================", "green"))
 # check data on floder
 folder_target = ["receive", "orderplan"]
 i = 0
@@ -87,7 +87,7 @@ while i < len(folder_target):
                         line_doc.append(len(line_doc))
                         # after upload remove text file
                         os.remove(txt_append)
-                        print(f"update data to spl cloud => {r}")
+                        print(colored(f"update data to spl cloud => {r}", "blue"))
 
                 x += 1
 
@@ -129,6 +129,7 @@ if token != False:
 
                 f.close()
                 # update status
+                print(colored(f'download G-EDI({(a["batch_file_name"]).upper()}) completed', "yellow"))
                 cloud.linenotify(f'download G-EDI({(a["batch_file_name"]).upper()}) completed')
                 cloud.update_gedi_status(token, a['id'], 1)
                 i += 1
@@ -136,5 +137,5 @@ if token != False:
 
     cloud.clear_token(token)
 
-print(f"end at: {datetime.now()}")
+print(colored("================= end upload to spl cloud at {datetime.now()} ==================", "green"))
 sys.exit(0)

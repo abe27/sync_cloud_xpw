@@ -292,6 +292,7 @@ class Yk:
             urllib3.disable_warnings()
             resp = requests.request(
                 "POST", url, data=payload, headers=headers, verify=False, timeout=3)
+            print(f"{os.getenv('YAZAKI_USER')} => login success")
 
         except Exception as msg:
             print(msg)
@@ -308,6 +309,7 @@ class Yk:
         pyload = {}
         requests.request("POST", url, data=pyload, headers=headers,
                              verify=False, timeout=3, cookies=session.cookies)
+        print(f"{os.getenv('YAZAKI_USER')} => logout success")
         return True
 
     def get_link(self):
@@ -316,6 +318,7 @@ class Yk:
             import datetime
             import requests
             from bs4 import BeautifulSoup
+            from termcolor import colored
             import os
 
             etd = str(datetime.datetime.now().strftime('%Y%m%d'))
@@ -341,7 +344,7 @@ class Yk:
                         if td.find("a") != None:
                             found = True
 
-                        if found is False:
+                        if found is True:
                             if len(docs) >= 9:
                                 l = ObjectLink(os.getenv('YAZAKI_TYPE'), docs[0], docs[1], str(docs[2]).replace(
                                     ",", "").strip(), docs[3], f"{docs[4]} {docs[5]}", docs[6], docs[7], docs[8], found)
@@ -350,6 +353,9 @@ class Yk:
                         i += 1
 
                 # logout
+                if len(obj) > 0:
+                    print(colored(f"found new link => {len(obj)}", "green"))
+
                 self.__logout(session)
 
         except Exception as ex:
@@ -362,6 +368,7 @@ class Yk:
         from datetime import datetime
         import requests
         from bs4 import BeautifulSoup
+        from termcolor import colored
         import os
 
         session = self.__login()
@@ -374,6 +381,7 @@ class Yk:
                     rq = requests.get(filelink, stream=True, verify=False,
                                       cookies=session.cookies, allow_redirects=True)
                     docs = BeautifulSoup(rq.content, 'lxml')
+                    print(colored(f"download gedi {objtype} file : {(filename).upper()}", "blue"))
                     # logout
                     self.__logout(session)
 
@@ -385,4 +393,5 @@ class Yk:
 
     def __init__(self):
         import datetime
-        print("Yazaki Package Running At: " + datetime.datetime.now().strftime('%x'))
+        from termcolor import colored
+        print(colored("Yazaki Package Running At: " + datetime.datetime.now().strftime('%Y%m%d %H:%I:%S'), "magenta"))
