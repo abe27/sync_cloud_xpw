@@ -38,3 +38,11 @@
 >\#initial function<br />
 >y = Yk()<br />
 >cloud = SplCloud()<br />
+
+**+++++++++++++++++++++++++++++++++++++++++**
+<br />
+>python setup.py sdist bdist_wheel
+><br />
+>python -m twine upload dist/*
+
+**+++++++++++++++++++++++++++++++++++++++++**

@@ -1,11 +1,12 @@
 from setuptools import setup, find_packages
+import datetime
 
 with open("README.md", "r", encoding='utf-8') as fh:
     long_description = fh.read()
 
 setup(
     name="yazaki_packages",
-    version="0.1-beta",
+    version=f"1.{datetime.datetime.now().strftime('%Y%m%d')}.{datetime.datetime.now().strftime('%H%I%S')}-beta",
     author="kanomthai",
     author_email="krumii.it@gmail.com",
     description="Some description",
