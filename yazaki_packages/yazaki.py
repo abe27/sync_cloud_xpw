@@ -341,7 +341,7 @@ class Yk:
                         if td.find("a") != None:
                             found = True
 
-                        if found is True:
+                        if found is False:
                             if len(docs) >= 9:
                                 l = ObjectLink(os.getenv('YAZAKI_TYPE'), docs[0], docs[1], str(docs[2]).replace(
                                     ",", "").strip(), docs[3], f"{docs[4]} {docs[5]}", docs[6], docs[7], docs[8], found)

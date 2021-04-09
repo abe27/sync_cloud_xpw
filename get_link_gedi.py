@@ -87,10 +87,8 @@ while i < len(folder_target):
                     os.remove(txt_append)
                     print(f"remove => {r}")
 
-            time.sleep(0.5)
             x += 1
 
-        cloud.clear_token(token)
         # notifies on line message
         if len(line_doc) > 0:
             msg = f"Upload {(folder_target[i]).upper()}({len(line_doc)}) to XPW Online completed."
