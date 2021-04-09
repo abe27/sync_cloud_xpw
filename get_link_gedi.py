@@ -23,9 +23,9 @@ cloud = SplCloud()
 yazaki_link = y.get_link()
 if len(yazaki_link) > 0:
     for i in yazaki_link:
-        docs = y.download(i.objtype, i.batchfile, i.linkfile())
+        docs = y.download(i.filetype, i.batchfile, i.linkfile())
         if docs != False:
-            filename = f'./data/{(i.objtype).lower()}/{i.batchid}.{(i.batchfile).upper()}'
+            filename = f'./data/{(i.filetype).lower()}/{i.batchid}.{(i.batchfile).upper()}'
 
             # check duplicate file gedi. remove when exits.
             if os.path.exists(filename) == True:

@@ -299,8 +299,15 @@ class Yk:
 
         return resp
 
-    def __logout(self):
-        print("logout")
+    def __logout(self, session):
+        import requests
+        import os
+
+        url = f"https://{os.getenv('YAZAKI_HOST')}:{os.getenv('YAZAKI_PORT')}/cehttp/servlet/MailboxServlet?operation=LOGOFF"
+        headers = {}
+        pyload = {}
+        requests.request("POST", url, data=pyload, headers=headers,
+                             verify=False, timeout=3, cookies=session.cookies)
         return True
 
     def get_link(self):
@@ -325,14 +332,14 @@ class Yk:
                 # print(type(r))
                 soup = BeautifulSoup(r.text, 'html.parser')
                 for tr in soup.find_all('tr'):
-                    found = True
+                    found = False
                     i = 0
                     docs = []
                     for td in tr.find_all('td'):
                         txt = self.__restrip(td.text)
                         docs.append(txt)
                         if td.find("a") != None:
-                            found = False
+                            found = True
 
                         if found is bool(os.getenv('YAZAKI_ANCHOR_TAG')):
                             if len(docs) >= 9:
@@ -341,6 +348,9 @@ class Yk:
                                 obj.append(l)
 
                         i += 1
+
+                # logout
+                self.__logout(session)
 
         except Exception as ex:
             print(ex)
@@ -362,16 +372,17 @@ class Yk:
                 if session.status_code == 200:
                     # download file
                     rq = requests.get(filelink, stream=True, verify=False,
-                                    cookies=session.cookies, allow_redirects=True)
+                                      cookies=session.cookies, allow_redirects=True)
                     docs = BeautifulSoup(rq.content, 'lxml')
+                    # logout
+                    self.__logout(session)
 
         except Exception as ex:
             print(ex)
             pass
 
-        
         return docs
 
     def __init__(self):
-        
+
         print("Ok")
