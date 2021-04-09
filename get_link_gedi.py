@@ -17,7 +17,7 @@ env_path = f'{pathlib.Path().absolute()}/.env'
 load_dotenv(env_path)
 
 print(colored(
-    f"========== start download from yazaki at: {datetime.now().strftime('%Y%m%d %H:%I:%S')} ==========", "yellow"))
+    f"========== start download from yazaki at: {datetime.now()} ==========", "yellow"))
 
 # initial function
 y = Yk()
@@ -50,7 +50,7 @@ if len(yazaki_link) > 0:
     cloud.linenotify(msg)
 
 print(colored(
-    f"============ end download from yazaki at: {datetime.now().strftime('%Y%m%d %H:%I:%S')} ===================", "yellow"))
+    f"============ end download from yazaki at: {datetime.now()} ===================", "yellow"))
 
 print("\n")
 print(colored("================= begin start upload to spl cloud ==================", "green"))
@@ -79,7 +79,7 @@ while i < len(folder_target):
                         'file_name': (r[8:]).upper(),
                         'file_path': f"{pathlib.Path().absolute()}/data/{folder_target[i]}/{r}",
                         'batch_size': os.path.getsize(txt_append),
-                        'upload_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                        'upload_date': datetime.now().strftime('%Y-%m-%d %X'),
                         'download': 0,
                         'is_type': 'U',
                         'token': token,

@@ -394,4 +394,4 @@ class Yk:
     def __init__(self):
         import datetime
         from termcolor import colored
-        print(colored("Yazaki Package Running At: " + datetime.datetime.now().strftime('%Y%m%d %H:%I:%S'), "magenta"))
+        print(colored("Yazaki Package Running At: " + str(datetime.datetime.now()), "magenta"))
