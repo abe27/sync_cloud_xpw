@@ -9,10 +9,14 @@ from datetime import datetime
 
 import pathlib
 import sys
+import time
 
 from dotenv import load_dotenv
 env_path = f'{pathlib.Path().absolute()}/.env'
 load_dotenv(env_path)
+
+
+print(f"start download from yazaki at: {datetime.now()}")
 
 # initial function
 y = Yk()
@@ -43,6 +47,8 @@ if len(yazaki_link) > 0:
 
     msg = f"create gedi {len(yazaki_link)} completed."
     cloud.linenotify(msg)
+
+print(f"end download from yazaki at: {datetime.now()}")
 
 
 # check data on floder
@@ -81,6 +87,7 @@ while i < len(folder_target):
                     os.remove(txt_append)
                     print(f"remove => {r}")
 
+            time.sleep(0.5)
             x += 1
 
         cloud.clear_token(token)
@@ -128,5 +135,5 @@ if doc != False:
 
 cloud.clear_token(token)
 
-
+print(f"end at: {datetime.now()}")
 sys.exit(0)
