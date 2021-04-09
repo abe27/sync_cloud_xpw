@@ -11,8 +11,8 @@ class SplCloud:
         token = False
 
         url = f"http://{os.getenv('HOSTNAME')}/api/v1/login"
-        passwd = urllib.parse.quote(os.getenv('PASSWORD'))
-        payload = f"username={os.getenv('USERNAME')}&password={passwd}"
+        passwd = urllib.parse.quote(os.getenv('SPL_PASSWORD'))
+        payload = f"username={os.getenv('SPL_USERNAME')}&password={passwd}"
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
         }

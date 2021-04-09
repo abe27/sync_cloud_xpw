@@ -384,5 +384,5 @@ class Yk:
         return docs
 
     def __init__(self):
-
-        print("Ok")
+        import datetime
+        print("Yazaki Package Running At: " + datetime.datetime.now().strftime('%x'))
