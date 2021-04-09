@@ -87,13 +87,13 @@ while i < len(folder_target):
                         line_doc.append(len(line_doc))
                         # after upload remove text file
                         os.remove(txt_append)
-                        print(f"remove => {r}")
+                        print(f"update data to spl cloud => {r}")
 
                 x += 1
 
             # notifies on line message
             if len(line_doc) > 0:
-                msg = f"Upload {(folder_target[i]).upper()}({len(line_doc)}) to XPW Online completed."
+                msg = f"upload {(folder_target[i]).upper()}({len(line_doc)}) to XPW Online completed."
                 cloud.linenotify(msg)
 
         line_doc = []
