@@ -50,12 +50,8 @@ class SplCloud:
         url = f"http://{os.getenv('HOSTNAME')}/api/v1/filegedi/store"
 
         payload = {
-            'yazaki_user': doc['yazaki_id'],
-            'gedi_type': doc['gedi_type'],
             'batch_id': doc['batch_id'],
             'upload_at': doc['upload_date'],
-            'download': doc['download'],
-            'is_type': doc['is_type']
         }
 
         files = [
