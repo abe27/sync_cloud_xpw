@@ -25,6 +25,12 @@
 >YAZAKI_ANCHOR_TAG=False<br />
 >
 >LINE_NOTIFY_TOKEN=<br />
+>[DATABASE_CONNECT_STRING]<br />>
+>DB_HOST=<br />
+>DB_PORT=<br />
+>DB_NAME=<br />
+>DB_USER=<br />
+>DB_PASSWD=<br />
 
 4. ทำการสร้างไฟล์ **.py** และเรียกใช้งาน **yazaki-packages**
 >import os<br />
