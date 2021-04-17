@@ -100,7 +100,7 @@ class Yk:
 
         return partname
 
-    def __read_ck_receive(self, filename):
+    def read_ck_receive(self, filename):
         from datetime import datetime
         import uuid
 
@@ -177,7 +177,7 @@ class Yk:
                 pass
         return docs
 
-    def __read_ck_orderplan(self, filename):
+    def read_ck_orderplan(self, filename):
         from datetime import datetime
         import uuid
 
