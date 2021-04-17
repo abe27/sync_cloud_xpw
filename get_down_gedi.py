@@ -5,6 +5,8 @@ from termcolor import colored
 from datetime import datetime
 import os
 import pathlib
+import shutil
+import sys
 
 from dotenv import load_dotenv
 env_path = f'{pathlib.Path().absolute()}/.env'
@@ -27,7 +29,7 @@ if token != False:
                 docs = cloud.get_text_file(
                     f"http://{os.getenv('HOSTNAME')}{a['file_path']}")
                 gedi_type = a['gedi_types']['title']
-                filename = f'./temp/{(gedi_type).upper()}/{datetime.now().strftime("%Y%m%d")}'
+                filename = f'./temp/{(gedi_type).upper()}/{(datetime.strptime(a["upload_date"], "%Y-%m-%d")).strftime("%Y%m%d")}'
 
                 # check duplicate file gedi. remove when exits.
                 if os.path.exists(filename) is False:
@@ -81,7 +83,10 @@ for i in file_dir:
     for j in list_dir:
         dir_name = f"{f_floder}/{j}/"
         list_file_dir = os.listdir(dir_name)
+
+        whsname = "CK2"
         for x in list_file_dir:
+            fnme = x
             fname = f"{dir_name}/{x}"
             file_id = db.get_fetch_one(
                 f"select id from tbt_gedi_datas where batch_file_name='{x}'")
@@ -92,8 +97,9 @@ for i in file_dir:
                 receivingkey = None
                 a = 0
                 if len(docs) > 0:
+                    whsname = f'CK{str(docs[0]["faczone"][2:])}'
                     whs_id = db.get_fetch_one(
-                        f"select id from tbt_whs where title='CK2'")
+                        f"select id from tbt_whs where title='{whsname}'")
                     tag_id = db.get_fetch_one(
                         f"select id from tbt_tag_groups where title='{docs[0]['factory']}'")
                     while a < len(docs):
@@ -137,16 +143,20 @@ for i in file_dir:
                             db.excute_data(f"update tbt_receive_datas set sync=false where receivingkey='{r['receivingkey']}'")
                             db.excute_data(f"update tbt_receive_headers set sync=false where receive_no='{obj['receivingkey']}'")
 
-                    print(os.getenv("HOME"))
-
             elif i == "ORDERPLAN":
+                whsname = "CK2"
                 # read orderplan
                 docs = y.read_ck_orderplan(fname)
 
             else:
-                fnme = x
+                whsname = "RMW"
                 if i == "NARRIS":
                     fnme = x[len("NRRIS.32TE.SPL.ISSUENO."):]
-                
-                print(fnme)
-                fname = f"{dir_name}/{fnme}"
+
+            target_path = f'{os.getenv("HOME")}/GEDI/{whsname}/{i}/{j}'
+            if os.path.exists(target_path) is False:
+                os.makedirs(target_path)
+
+            shutil.move(fname, f"{target_path}/{fnme}")
+
+sys.exit(0)
