@@ -63,13 +63,10 @@ def __upload_to_spl_cloud():
     while i < len(folder_target):
         # show list file on folder_target
         fname = f"{pathlib.Path().absolute()}/data/{folder_target[i]}"
-        print(fname)
         folder_list = os.listdir(fname)
-        print(folder_list)
         if len(folder_list) > 0:
             line_doc = []
             token = cloud.get_token()
-            print(token)
             if token != False:
                 x = 0
                 while x < len(folder_list):
@@ -91,7 +88,6 @@ def __upload_to_spl_cloud():
                             'token': token,
                         }
                         
-                        print(docs)
                         if cloud.upload_gedi_to_cloud(docs):
                             line_doc.append(len(line_doc))
                             # after upload remove text file
@@ -113,6 +109,7 @@ def __upload_to_spl_cloud():
 
 
 if __name__ == '__main__':
+    __get_link_yazaki()
     __upload_to_spl_cloud()
     sys.exit(0)
     
