@@ -119,6 +119,8 @@ if __name__ == '__main__':
         __get_link_yazaki()
         __upload_to_spl_cloud()
 
+    PsDb().excute_data(f"update tbt_refresh_gedis set refresh_status=true")
+
     sys.exit(0)
     
 
