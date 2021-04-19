@@ -59,7 +59,7 @@ def main(yazaki_link):
 def __get_link_yazaki():
     # get yazaki link
     main(y.get_link())
-    main(y.get_link_centrol())
+    # main(y.get_link_centrol())
 
 def __upload_to_spl_cloud():
     # check data on floder
