@@ -13,11 +13,10 @@ import sys
 import time
 
 from dotenv import load_dotenv
-# env_path = f'{pathlib.Path().absolute()}/.env'
-env_path = f"/home/seiwa/webservice/sync_service/.env"
+# app_path = f'{pathlib.Path().absolute()}'
+app_path = f"/home/seiwa/webservice/sync_service"
+env_path = f"{app_path}/.env"
 load_dotenv(env_path)
-
-print(env_path)
 
 print(colored(
     f"========== start download from yazaki at: {datetime.now()} ==========", "yellow"))
@@ -34,7 +33,7 @@ def __get_link_yazaki():
         for i in yazaki_link:
             docs = y.download(i.filetype, i.batchfile, i.linkfile())
             if docs != False:
-                filename = f'./data/{(i.filetype).lower()}/{i.batchid}.{(i.batchfile).upper()}'
+                filename = f'{app_path}/data/{(i.filetype).lower()}/{i.batchid}.{(i.batchfile).upper()}'
 
                 # check duplicate file gedi. remove when exits.
                 if os.path.exists(filename) == True:
@@ -65,7 +64,7 @@ def __upload_to_spl_cloud():
     i = 0
     while i < len(folder_target):
         # show list file on folder_target
-        fname = f"{pathlib.Path().absolute()}/data/{folder_target[i]}"
+        fname = f"{app_path}/data/{folder_target[i]}"
         folder_list = os.listdir(fname)
         if len(folder_list) > 0:
             line_doc = []
@@ -83,7 +82,7 @@ def __upload_to_spl_cloud():
                             'gedi_type': (folder_target[i]).upper(),
                             'batch_id': r[:7],
                             'file_name': (r[8:]).upper(),
-                            'file_path': f"{pathlib.Path().absolute()}/data/{folder_target[i]}/{r}",
+                            'file_path': f"{app_path}/data/{folder_target[i]}/{r}",
                             'batch_size': os.path.getsize(txt_append),
                             'upload_date': datetime.now().strftime('%Y-%m-%d %X'),
                             'download': 0,
