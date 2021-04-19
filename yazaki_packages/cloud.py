@@ -10,7 +10,7 @@ class SplCloud:
 
         token = False
 
-        url = f"http://{os.getenv('HOSTNAME')}/api/v1/login"
+        url = f"http://{os.getenv('SPL_HOSTNAME')}/api/v1/login"
         passwd = urllib.parse.quote(os.getenv('SPL_PASSWORD'))
         payload = f"username={os.getenv('SPL_USERNAME')}&password={passwd}"
         headers = {
@@ -29,7 +29,7 @@ class SplCloud:
         import requests
         import urllib3
 
-        url = f"http://{os.getenv('HOSTNAME')}/api/v1/logout"
+        url = f"http://{os.getenv('SPL_HOSTNAME')}/api/v1/logout"
 
         payload = {}
         headers = {
@@ -47,7 +47,7 @@ class SplCloud:
         import requests
         import os
 
-        url = f"http://{os.getenv('HOSTNAME')}/api/v1/filegedi/store"
+        url = f"http://{os.getenv('SPL_HOSTNAME')}/api/v1/filegedi/store"
 
         payload = {
             'batch_id': doc['batch_id'],
@@ -73,7 +73,7 @@ class SplCloud:
         import requests
         import os
 
-        url = f"http://{os.getenv('HOSTNAME')}/api/v1/filegedi/index"
+        url = f"http://{os.getenv('SPL_HOSTNAME')}/api/v1/filegedi/index"
 
         payload = {}
         headers = {
@@ -92,7 +92,7 @@ class SplCloud:
         import requests
         import os
 
-        url = f"http://{os.getenv('HOSTNAME')}/api/v1/filegedi/{id}/update"
+        url = f"http://{os.getenv('SPL_HOSTNAME')}/api/v1/filegedi/{id}/update"
 
         payload = f'download={statuscode}'
         headers = {
