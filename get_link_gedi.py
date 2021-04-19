@@ -89,7 +89,8 @@ def __upload_to_spl_cloud():
                             'is_type': 'U',
                             'token': token,
                         }
-
+                        
+                        print(docs)
                         if cloud.upload_gedi_to_cloud(docs):
                             line_doc.append(len(line_doc))
                             # after upload remove text file
