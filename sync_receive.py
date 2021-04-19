@@ -48,6 +48,11 @@ while i < len(docs):
         part_desc = str(j[9]).replace("'", "''")
 
         plnctn += int(j[4])
+
+        sql_part = OraDB().get_fetch_one(f"select partno from txp_part where partno='{part_no}'")
+        sql_insert_part = f"update txp_part set partname='{part_desc}' where partno='{part_no}'"
+        if sql_part != False:
+            OraDB().excute_data(sql_insert_part)
     
         check_body_duplicate = OraDB().get_fetch_one(f"SELECT * FROM TXP_RECTRANSBODY WHERE receivingkey='{j[0]}' AND PARTNO='{j[2]}'")
         sql_rec_body = f"UPDATE TXP_RECTRANSBODY SET PLNQTY='{rec_body_qty}', PLNCTN='{rec_body_pln_ctn}' WHERE receivingkey='{j[0]}' AND PARTNO='{j[2]}'"
