@@ -84,6 +84,7 @@ for i in file_dir:
     f_floder = f"./temp/{i}"
     list_dir = os.listdir(f_floder)
     for j in list_dir:
+        print(j)
         dir_name = f"{f_floder}/{j}"
         list_file_dir = os.listdir(f"{dir_name}/")
         print(list_file_dir)
