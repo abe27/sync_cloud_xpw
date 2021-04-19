@@ -69,6 +69,7 @@ def __upload_to_spl_cloud():
         if len(folder_list) > 0:
             line_doc = []
             token = cloud.get_token()
+            print(token)
             if token != False:
                 x = 0
                 while x < len(folder_list):
