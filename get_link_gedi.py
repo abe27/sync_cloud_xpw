@@ -38,7 +38,7 @@ def main(yazaki_link):
 
             if docs != False:
 
-                if os.path.exists(f'{app_path}/data/{(i.filetype).lower()}'):
+                if os.path.exists(f'{app_path}/data/{(i.filetype).lower()}') is False:
                     os.mkdir(f'{app_path}/data/{(i.filetype).lower()}')
 
                 filename = f'{app_path}/data/{(i.filetype).lower()}/{i.batchid}.{(i.batchfile).upper()}'
