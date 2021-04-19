@@ -1,6 +1,6 @@
 from yazaki_packages.cloud import SplCloud
 from yazaki_packages.yazaki import Yk
-from yazaki_packages.db import Db
+from yazaki_packages.db import PsDb
 from termcolor import colored
 from datetime import datetime
 import os
@@ -17,7 +17,7 @@ load_dotenv(env_path)
 
 cloud = SplCloud()
 y = Yk()
-db = Db()
+db = PsDb()
 # get download gedi
 token = cloud.get_token()
 if token != False:

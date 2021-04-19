@@ -1,7 +1,7 @@
-class Db:
+class PsDb:
     def __init__(self, *args, **kwargs):
         return None
-    
+
     def get_fetch_one(self, sql):
         import os
         import psycopg2
@@ -58,4 +58,62 @@ class Db:
 
         cur.close()
         return True
-    
+
+
+class OraDB:
+    def __init__(self, *args, **kwargs):
+        return None
+
+    def get_fetch_one(self, sql):
+        import os
+        import cx_Oracle
+        conn = cx_Oracle.connect(os.getenv("ORA_STR"))
+        i = 0
+        cur = conn.cursor()
+        try:
+            cur.execute(sql)
+            db = cur.fetchone()
+            # print(type(db))
+            if db != None:
+                i = db[0]
+            else:
+                i = False
+
+            cur.close()
+        except Exception as e:
+            print(sql)
+            print(str(e))
+            cur.close()
+
+        return i
+
+    def get_fetch_all(self, sql):
+        import os
+        import cx_Oracle
+        try:
+            conn = cx_Oracle.connect(os.getenv("ORA_STR"))
+            cur = conn.cursor()
+            cur.execute(sql)
+            obj = cur.fetchall()
+        except Exception as ex:
+            print(ex)
+            pass
+        return obj
+
+    def excute_data(self, sql):
+        import os
+        import cx_Oracle
+        conn = cx_Oracle.connect(os.getenv("ORA_STR"))
+        cur = conn.cursor()
+        try:
+            cur.execute(sql)
+            conn.commit()
+            pass
+        except Exception as e:
+            print(sql)
+            print(str(e))
+            conn.rollback()
+            pass
+
+        cur.close()
+        return True
