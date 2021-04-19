@@ -7,7 +7,7 @@ class ObjectLink(object):
         filetype = "RECEIVE"
         factory = "INJ"
 
-        if os.getenv('YAZAKI_TYPE') == 'RMW':
+        if objtype == 'RMW':
             ordn = str(batchfile).strip()
             factory = "RMW"
             filename = ""
@@ -26,7 +26,7 @@ class ObjectLink(object):
             else:
                 filetype = "RECEIVE"
 
-        elif os.getenv('YAZAKI_TYPE') == 'CK2':
+        elif objtype == 'CK2':
             ordn = str(batchfile[:len("OES.VCBI")]).strip()
             bf = int(str(batchfile[len("OES.VCBI") + 3:])[1:2].strip())
             filetype = "RECEIVE"
@@ -37,10 +37,10 @@ class ObjectLink(object):
             if bf == 4:
                 factory = "AW"
 
-        elif os.getenv('YAZAKI_TYPE') == 'J03':
+        elif objtype == 'J03':
             print("J03")
 
-        elif os.getenv('YAZAKI_TYPE') == 'FG':
+        elif objtype == 'FG':
             print("FG")
 
         else:
@@ -434,7 +434,7 @@ class Yk:
 
                         if found is True:
                             if len(docs) >= 9:
-                                l = ObjectLink(os.getenv('YAZAKI_TYPE'), docs[0], docs[1], str(docs[2]).replace(
+                                l = ObjectLink(os.getenv("YAZAKI_TYPE"), docs[0], docs[1], str(docs[2]).replace(
                                     ",", "").strip(), docs[3], f"{docs[4]} {docs[5]}", docs[6], docs[7], docs[8], found)
                                 obj.append(l)
 
