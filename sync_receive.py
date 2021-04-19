@@ -45,7 +45,7 @@ while i < len(docs):
         rec_body_pln_ctn = int(j[4])
         unit_title  = j[6]
         coils_name = 20
-        part_desc = j[9]
+        part_desc = str(j[9]).replace("'", "'''")
 
         plnctn += int(j[4])
     

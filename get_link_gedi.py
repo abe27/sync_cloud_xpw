@@ -49,8 +49,8 @@ def __get_link_yazaki():
                 msg = f"Can't download {i.batchfile}!"
                 cloud.linenotify(msg)
 
-        msg = f"create gedi {len(yazaki_link)} completed."
-        cloud.linenotify(msg)
+        # msg = f"create gedi {len(yazaki_link)} completed."
+        # cloud.linenotify(msg)
 
     print(colored(
         f"============ end download from yazaki at: {datetime.now()} ===================", "yellow"))
