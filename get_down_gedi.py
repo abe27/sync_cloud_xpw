@@ -101,12 +101,11 @@ def __read_gedi(obj):
                     fnme = x
                     fname = f"{dir_name}/{x}"
                     file_id = db.get_fetch_one(
-                    f"select id from tbt_gedi_datas where batch_file_name='{x}'")
+                        f"select id from tbt_gedi_datas where batch_file_name='{x}'")
                     if i == "RECEIVE":
                         # read receive
                         docs = y.read_ck_receive(fname)
-                        rec_key = []
-                        receivingkey = None
+                        
                         a = 0
                         if len(docs) > 0:
                             whsname = f'CK{str(docs[0]["faczone"][2:])}'
@@ -149,12 +148,11 @@ def __read_gedi(obj):
                                 print(
                                     f"{part_seq}.{txt_body} => {r['receivingkey']} partno: {r['partno']}")
                                 a += 1
-                            if len(rec_key) > 0:
-                                for k in rec_key:
-                                    db.excute_data(
-                                        f"update tbt_receive_datas set sync=false where receivingkey='{r['receivingkey']}'")
-                                    db.excute_data(
-                                        f"update tbt_receive_headers set sync=false where receive_no='{obj['receivingkey']}'")
+
+                            db.excute_data(
+                                f"update tbt_receive_datas set sync=false where receivingkey='{r['receivingkey']}'")
+                            db.excute_data(
+                                f"update tbt_receive_headers set sync=false where receive_no='{obj['receivingkey']}'")
 
                     elif i == "ORDERPLAN":
                         whsname = "CK2"
@@ -176,12 +174,10 @@ def __read_gedi(obj):
                     shutil.move(fname, f"{target_path}/{fnme}")
                     # list_file_dir = os.listdir(dir_name)
                     # if len(list_file_dir) <= 0:
-                        #     os.removedirs(dir_name)
-
+                    #     os.removedirs(dir_name)
 
 
 if __name__ == '__main__':
     obj = __download_gedi()
     __read_gedi(obj)
     sys.exit(0)
-    
