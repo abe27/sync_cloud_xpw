@@ -146,7 +146,7 @@ def __download_gedi():
                                 a += 1
 
                             db.excute_data(
-                                f"update tbt_receive_datas set sync=false where receivingkey='{r['receivingkey']}'")
+                                f"update tbt_receive_datas set sync=false where receivingkey='{obj['receivingkey']}'")
                             db.excute_data(
                                 f"update tbt_receive_headers set sync=false where receive_no='{obj['receivingkey']}'")
 
