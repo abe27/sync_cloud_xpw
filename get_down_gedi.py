@@ -30,7 +30,7 @@ if token != False:
             while i < len(obj):
                 a = obj[i]
                 docs = cloud.get_text_file(
-                    f"http://{os.getenv('HOSTNAME')}{a['file_path']}")
+                    f"http://{os.getenv('SPL_HOSTNAME')}{a['file_path']}")
                 gedi_type = a['gedi_types']['title']
                 filename = f'./temp/{(gedi_type).upper()}/{(datetime.strptime(a["upload_date"], "%Y-%m-%d")).strftime("%Y%m%d")}'
 
