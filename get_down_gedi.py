@@ -173,7 +173,7 @@ def __download_gedi():
                         # if len(list_file_dir) <= 0:
                         #     os.removedirs(dir_name)
     except Exception as e:
-        cloud.linenotify(str(e))
+        # cloud.linenotify(str(e))
         sys.exit(0)
         pass
 
