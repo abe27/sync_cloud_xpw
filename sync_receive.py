@@ -1,6 +1,14 @@
 from yazaki_packages.db import PsDb, OraDB
 from yazaki_packages.cloud import SplCloud
 from datetime import datetime
+import pathlib
+from dotenv import load_dotenv
+app_path = f'{pathlib.Path().absolute()}'
+# app_path = f"/home/seiwa/webservice/sync_service"
+env_path = f"{app_path}/.env"
+
+load_dotenv(env_path)
+
 
 docs = PsDb().get_fetch_all("select id,case when substring(receive_no, 1, 2) = 'TI' then 'INJ' else 'AW' end factory ,receive_date,receive_no from tbt_receive_headers where sync=false")
 i = 0
