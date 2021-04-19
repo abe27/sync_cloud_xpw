@@ -19,6 +19,21 @@ cloud = SplCloud()
 y = Yk()
 db = PsDb()
 
+def __insert_receive_ent(obj, gedi_id, tag_id, whs_id):
+    rec_id = db.get_fetch_one(
+        f"select id from tbt_receive_headers where receive_no='{obj['receivingkey']}'")
+    if rec_id is False:
+        rec_date = datetime.strptime(obj['aetodt'], '%d/%m/%Y')
+        sql = f"""insert into tbt_receive_headers
+              (id, gedi_id, tag_id, whs_id, receive_date, receive_no,
+               receive_status, sync, created_at, updated_at)
+              values(uuid_generate_v4(), '{gedi_id}', '{tag_id}', '{whs_id}', '{rec_date.strftime('%Y-%m-%d')}', '{obj['receivingkey']}', '0', false, current_timestamp, current_timestamp)"""
+
+        db.excute_data(sql)
+        rec_id = db.get_fetch_one(
+            f"select id from tbt_receive_headers where receive_no='{obj['receivingkey']}'")
+    return rec_id
+
 
 def __download_gedi():
     # get download gedi
@@ -63,26 +78,7 @@ def __download_gedi():
 
     print(colored(
         "================= end upload to spl cloud at {datetime.now()} ==================", "green"))
-    return obj
-
-
-def __insert_receive_ent(obj, gedi_id, tag_id, whs_id):
-    rec_id = db.get_fetch_one(
-        f"select id from tbt_receive_headers where receive_no='{obj['receivingkey']}'")
-    if rec_id is False:
-        rec_date = datetime.strptime(obj['aetodt'], '%d/%m/%Y')
-        sql = f"""insert into tbt_receive_headers
-              (id, gedi_id, tag_id, whs_id, receive_date, receive_no,
-               receive_status, sync, created_at, updated_at)
-              values(uuid_generate_v4(), '{gedi_id}', '{tag_id}', '{whs_id}', '{rec_date.strftime('%Y-%m-%d')}', '{obj['receivingkey']}', '0', false, current_timestamp, current_timestamp)"""
-
-        db.excute_data(sql)
-        rec_id = db.get_fetch_one(
-            f"select id from tbt_receive_headers where receive_no='{obj['receivingkey']}'")
-    return rec_id
-
-
-def __read_gedi(obj):
+ 
     # read gedi file
     file_dir = [f"RECEIVE", f"ORDERPLAN", f"DOMESTIC",
                 f"EXPORT", f"ISSUE", f"NARRIS"]
@@ -105,7 +101,7 @@ def __read_gedi(obj):
                     if i == "RECEIVE":
                         # read receive
                         docs = y.read_ck_receive(fname)
-                        
+
                         a = 0
                         if len(docs) > 0:
                             whsname = f'CK{str(docs[0]["faczone"][2:])}'
@@ -178,6 +174,5 @@ def __read_gedi(obj):
 
 
 if __name__ == '__main__':
-    obj = __download_gedi()
-    __read_gedi(obj)
+    __download_gedi()
     sys.exit(0)
