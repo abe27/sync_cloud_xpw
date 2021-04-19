@@ -37,6 +37,10 @@ def main(yazaki_link):
                 docs = y.download(i.filetype, i.batchfile, i.linkfile())
 
             if docs != False:
+
+                if os.path.exists(f'{app_path}/data/{(i.filetype).lower()}'):
+                    os.mkdir(f'{app_path}/data/{(i.filetype).lower()}')
+
                 filename = f'{app_path}/data/{(i.filetype).lower()}/{i.batchid}.{(i.batchfile).upper()}'
 
                 # check duplicate file gedi. remove when exits.
