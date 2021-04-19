@@ -87,6 +87,7 @@ def __download_gedi():
     print(colored(
         "================= end upload to spl cloud at {datetime.now()} ==================", "green"))
  
+def read_gedi_folder():
     # read gedi file
     try:
         for i in check_floder():
@@ -95,6 +96,10 @@ def __download_gedi():
             for j in list_dir:
                 print(f"{f_floder}/{j}")
                 if j != ".gitkeep":
+
+                    receive_key = None
+                    keys_list = []
+
                     whsname = "CK2"
                     fnme = j
                     fname = f"{f_floder}/{fnme}"
@@ -112,6 +117,14 @@ def __download_gedi():
                                 f"select id from tbt_tag_groups where title='{docs[0]['factory']}'")
                             while a < len(docs):
                                 r = docs[a]
+                                if receive_key is None:
+                                    receive_key =  r['receivingkey']
+                                    keys_list.append(receive_key)
+
+                                else:
+                                    if receive_key !=  r['receivingkey']:
+                                        keys_list.append(receive_key)
+
                                 receive_data_id = db.get_fetch_one(
                                     f"select id from tbt_receive_datas where receivingkey='{r['receivingkey']}' and partno='{r['partno']}'")
                                 if receive_data_id is False:
@@ -145,10 +158,11 @@ def __download_gedi():
                                 print(
                                     f"{part_seq}.{txt_body} => {r['receivingkey']} partno: {r['partno']}")
                                 a += 1
-                            db.excute_data(
-                                f"update tbt_receive_datas set sync=false where receivingkey='{obj['receivingkey']}'")
-                            db.excute_data(
-                                f"update tbt_receive_headers set sync=false where receive_no='{obj['receivingkey']}'")
+
+                            for k in keys_list:
+                                db.excute_data(f"update tbt_receive_datas set sync=false where receivingkey='{k}'")
+                                db.excute_data(f"update tbt_receive_headers set sync=false where receive_no='{k}'")
+                                
                     elif i == "ORDERPLAN":
                         whsname = "CK2"
                         # read orderplan
@@ -178,5 +192,5 @@ def __download_gedi():
 
 if __name__ == '__main__':
     __download_gedi()
-    # check_floder()
+    read_gedi_folder()
     sys.exit(0)
