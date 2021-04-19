@@ -16,6 +16,10 @@ class SplCloud:
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
         }
+
+        print(url)
+        print(payload)
+
         urllib3.disable_warnings()
         response = requests.request("POST", url, headers=headers, data=payload)
         print(response.status_code)
