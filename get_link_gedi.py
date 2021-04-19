@@ -16,6 +16,8 @@ from dotenv import load_dotenv
 env_path = f'{pathlib.Path().absolute()}/.env'
 load_dotenv(env_path)
 
+print(env_path)
+
 print(colored(
     f"========== start download from yazaki at: {datetime.now()} ==========", "yellow"))
 
