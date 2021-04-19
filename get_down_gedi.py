@@ -81,10 +81,10 @@ file_dir = [f"RECEIVE", f"ORDERPLAN", f"DOMESTIC",
             f"EXPORT", f"ISSUE", f"NARRIS"]
 
 for i in file_dir:
-    f_floder = f"./temp/{i}/"
+    f_floder = f"./temp/{i}"
     list_dir = os.listdir(f_floder)
     for j in list_dir:
-        dir_name = f"{f_floder}/{j}/"
+        dir_name = f"{f_floder}/{j}"
         list_file_dir = os.listdir(dir_name)
         whsname = "CK2"
         for x in list_file_dir:
