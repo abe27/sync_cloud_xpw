@@ -9,7 +9,10 @@ import shutil
 import sys
 
 from dotenv import load_dotenv
-env_path = f'{pathlib.Path().absolute()}/.env'
+# app_path = f'{pathlib.Path().absolute()}'
+app_path = f"/home/seiwa/webservice/sync_service"
+env_path = f"{app_path}/.env"
+
 load_dotenv(env_path)
 
 cloud = SplCloud()
