@@ -43,7 +43,7 @@ def check_floder():
                 dir_name.append(_i)
 
             else:
-                os.remove(f"temp/{_i}")
+                os.rmdir(f"temp/{_i}")
 
     return dir_name
 
