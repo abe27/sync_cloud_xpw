@@ -85,9 +85,11 @@ for i in file_dir:
     list_dir = os.listdir(f_floder)
     for j in list_dir:
         dir_name = f"{f_floder}/{j}"
-        list_file_dir = os.listdir(dir_name)
+        list_file_dir = os.listdir(f"{dir_name}/")
+        print(list_file_dir)
         whsname = "CK2"
         for x in list_file_dir:
+            print(x)
             if x != ".gitkeep":
                 fnme = x
                 fname = f"{dir_name}/{x}"
