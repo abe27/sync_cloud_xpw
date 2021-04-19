@@ -25,10 +25,7 @@ print(colored(
 y = Yk()
 cloud = SplCloud()
 
-
-def __get_link_yazaki():
-    # get yazaki link
-    yazaki_link = y.get_link()
+def main(yazaki_link):
     if len(yazaki_link) > 0:
         for i in yazaki_link:
             docs = y.download(i.filetype, i.batchfile, i.linkfile())
@@ -57,6 +54,12 @@ def __get_link_yazaki():
 
     print("\n")
     print(colored("================= begin start upload to spl cloud ==================", "green"))
+
+def __get_link_yazaki():
+    # get yazaki link
+    main(y.get_link())
+    main(y.get_link_centrol())
+    
 
 def __upload_to_spl_cloud():
     # check data on floder

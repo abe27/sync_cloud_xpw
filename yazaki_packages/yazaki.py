@@ -300,6 +300,42 @@ class Yk:
 
         return resp
 
+    def __login_centrol(self):
+        import sys
+        import os
+        import urllib
+        import urllib3
+        import requests
+        resp = False
+        try:
+            # login yazaki website.
+            url = f"https://{os.getenv('YAZAKI_HOST')}:{os.getenv('YAZAKI_PORT')}/cehttp/servlet/MailboxServlet"
+            passwd = urllib.parse.quote(os.getenv('WHS_YAZAKI_PASSWD'))
+            payload = f"operation=LOGON&remote={os.getenv('WHS_YAZAKI_USER')}&password={passwd}"
+            headers = {'Content-Type': "application/x-www-form-urlencoded"}
+            urllib3.disable_warnings()
+            resp = requests.request(
+                "POST", url, data=payload, headers=headers, verify=False, timeout=3)
+            print(f"{os.getenv('WHS_YAZAKI_USER')} => login success")
+
+        except Exception as msg:
+            print(msg)
+            sys.exit(0)
+
+        return resp
+
+    def __logout_centrol(self, session):
+        import requests
+        import os
+
+        url = f"https://{os.getenv('YAZAKI_HOST')}:{os.getenv('YAZAKI_PORT')}/cehttp/servlet/MailboxServlet?operation=LOGOFF"
+        headers = {}
+        pyload = {}
+        requests.request("POST", url, data=pyload, headers=headers,
+                             verify=False, timeout=3, cookies=session.cookies)
+        print(f"{os.getenv('WHS_YAZAKI_USER')} => logout success")
+        return True
+
     def __logout(self, session):
         import requests
         import os
@@ -311,6 +347,58 @@ class Yk:
                              verify=False, timeout=3, cookies=session.cookies)
         print(f"{os.getenv('YAZAKI_USER')} => logout success")
         return True
+
+    def get_link_centrol(self):
+        obj = []
+        try:
+            import datetime
+            import requests
+            from bs4 import BeautifulSoup
+            from termcolor import colored
+            import os
+
+            etd = str(datetime.datetime.now().strftime('%Y%m%d'))
+
+            # get cookies after login.
+            session = self.__login_centrol()
+            if session.status_code == 200:
+                # get html page
+                url = f"https://{os.getenv('YAZAKI_HOST')}:{os.getenv('YAZAKI_PORT')}/cehttp/servlet/MailboxServlet"
+                headers = {'Content-Type': "application/x-www-form-urlencoded"}
+                pyload = f"operation=DIRECTORY&fromdate={etd}&Submit=Receive"
+                r = requests.request("POST", url, data=pyload, headers=headers,
+                                     verify=False, timeout=3, cookies=session.cookies)
+                # print(type(r))
+                soup = BeautifulSoup(r.text, 'html.parser')
+                for tr in soup.find_all('tr'):
+                    found = False
+                    i = 0
+                    docs = []
+                    for td in tr.find_all('td'):
+                        txt = self.__restrip(td.text)
+                        docs.append(txt)
+                        if td.find("a") != None:
+                            found = True
+
+                        if found is True:
+                            if len(docs) >= 9:
+                                l = ObjectLink(os.getenv('WHS_YAZAKI_TYPE'), docs[0], docs[1], str(docs[2]).replace(
+                                    ",", "").strip(), docs[3], f"{docs[4]} {docs[5]}", docs[6], docs[7], docs[8], found)
+                                obj.append(l)
+
+                        i += 1
+
+                # logout
+                if len(obj) > 0:
+                    print(colored(f"found new link => {len(obj)}", "green"))
+
+                self.__logout_centrol(session)
+
+        except Exception as ex:
+            print(ex)
+            pass
+
+        return obj
 
     def get_link(self):
         obj = []
@@ -363,6 +451,33 @@ class Yk:
             pass
 
         return obj
+
+    def download_centrol(self, objtype, filename, filelink):
+        from datetime import datetime
+        import requests
+        from bs4 import BeautifulSoup
+        from termcolor import colored
+        import os
+
+        session = self.__login_centrol()
+
+        docs = False
+        try:
+            if session is not None:
+                if session.status_code == 200:
+                    # download file
+                    rq = requests.get(filelink, stream=True, verify=False,
+                                      cookies=session.cookies, allow_redirects=True)
+                    docs = BeautifulSoup(rq.content, 'lxml')
+                    print(colored(f"download gedi {objtype} file : {(filename).upper()}", "blue"))
+                    # logout
+                    self.__logout_centrol(session)
+
+        except Exception as ex:
+            print(ex)
+            pass
+
+        return docs
 
     def download(self, objtype, filename, filelink):
         from datetime import datetime
