@@ -39,7 +39,11 @@ def check_floder():
     dir_name = []
     for _i in folder_a:
         if _i != ".gitkeep":
-            dir_name.append(_i)
+            if len(os.listdir(f"temp/{_i}")) > 0:
+                dir_name.append(_i)
+
+            else:
+                os.remove(f"temp/{_i}")
 
     return dir_name
 
