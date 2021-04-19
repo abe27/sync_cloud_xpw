@@ -13,7 +13,8 @@ import sys
 import time
 
 from dotenv import load_dotenv
-env_path = f'{pathlib.Path().absolute()}/.env'
+# env_path = f'{pathlib.Path().absolute()}/.env'
+env_path = f"/home/seiwa/webservice/sync_service/.env"
 load_dotenv(env_path)
 
 print(env_path)
