@@ -62,8 +62,10 @@ def __upload_to_spl_cloud():
     i = 0
     while i < len(folder_target):
         # show list file on folder_target
-        fname = f"./data/{folder_target[i]}"
+        fname = f"{pathlib.Path().absolute()}/data/{folder_target[i]}"
+        print(fname)
         folder_list = os.listdir(fname)
+        print(folder_list)
         if len(folder_list) > 0:
             line_doc = []
             token = cloud.get_token()
