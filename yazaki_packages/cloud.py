@@ -144,7 +144,7 @@ class SplCloud:
         payload = 'message='+msg
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': f'Bearer {os.getenv("LINE_NOTIFY_TOKEN")}'
+            'Authorization': f'Bearer {os.getenv("LINE_NOTIFY_ERROR_TOKEN")}'
         }
 
         response = requests.request("POST", url, headers=headers, data=payload)
