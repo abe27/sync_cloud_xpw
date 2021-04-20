@@ -81,7 +81,7 @@ def __download_gedi():
                     # update status
                     print(colored(
                         f'download G-EDI({(a["batch_file_name"]).upper()}) completed', "yellow"))
-                    cloud.linenotify(
+                    cloud.linenotify_error(
                         f'download G-EDI({(a["batch_file_name"]).upper()}) completed')
                     cloud.update_gedi_status(token, a['id'], 1)
                     i += 1
@@ -190,7 +190,7 @@ def read_gedi_folder():
                     # if len(list_file_dir) <= 0:
                     #     os.removedirs(dir_name)
     except Exception as e:
-        cloud.linenotify(str(e))
+        cloud.linenotify_error(str(e))
         sys.exit(0)
         pass
 

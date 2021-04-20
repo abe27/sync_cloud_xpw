@@ -143,7 +143,7 @@ def __upload_to_spl_cloud():
                     # notifies on line message
                     if len(line_doc) > 0:
                         msg = f"upload {(folder_target[i]).upper()}({len(line_doc)}) to XPW Online completed."
-                        cloud.linenotify(msg)
+                        cloud.linenotify_error(msg)
 
                 line_doc = []
 
