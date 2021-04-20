@@ -34,18 +34,18 @@ def __insert_receive_ent(obj, gedi_id, tag_id, whs_id):
             f"select id from tbt_receive_headers where receive_no='{obj['receivingkey']}'")
     return rec_id
 
-def check_floder():
-    folder_a = os.listdir("temp")
-    dir_name = []
-    for _i in folder_a:
-        if _i != ".gitkeep":
-            if len(os.listdir(f"temp/{_i}")) > 0:
-                dir_name.append(_i)
+# def check_floder():
+#     folder_a = os.listdir("temp")
+#     dir_name = []
+#     for _i in folder_a:
+#         if _i != ".gitkeep":
+#             if len(os.listdir(f"temp/{_i}")) > 0:
+#                 dir_name.append(_i)
 
-            else:
-                os.rmdir(f"temp/{_i}")
+#             else:
+#                 os.rmdir(f"temp/{_i}")
 
-    return dir_name
+#     return dir_name
 
 def __download_gedi():
     # get download gedi
@@ -94,7 +94,7 @@ def __download_gedi():
 def read_gedi_folder():
     # read gedi file
     try:
-        for i in check_floder():
+        for i in cloud.check_floder("temp"):
             f_floder = f"./temp/{i}"
             list_dir = os.listdir(f_floder)
             for j in list_dir:
@@ -197,4 +197,5 @@ def read_gedi_folder():
 if __name__ == '__main__':
     __download_gedi()
     read_gedi_folder()
+    cloud.check_folder("temp")
     sys.exit(0)

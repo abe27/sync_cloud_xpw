@@ -25,21 +25,6 @@ print(colored(
 y = Yk()
 cloud = SplCloud()
 
-
-def check_folder():
-    folder_a = os.listdir("data")
-    dir_name = []
-    for _i in folder_a:
-        if _i != ".gitkeep":
-            if len(os.listdir(f"data/{_i}")) > 0:
-                dir_name.append(_i)
-
-            else:
-                os.rmdir(f"data/{_i}")
-
-    return dir_name
-
-
 def main(yazaki_link):
     if len(yazaki_link) > 0:
         for i in yazaki_link:
@@ -88,7 +73,7 @@ def __get_link_yazaki():
 def __upload_to_spl_cloud():
     # check data on floder
     try:
-        folder_target = check_folder()
+        folder_target = cloud.check_folder("data")
         i = 0
         while i < len(folder_target):
             # show list file on folder_target
@@ -157,6 +142,6 @@ def __upload_to_spl_cloud():
 if __name__ == '__main__':
     __get_link_yazaki()
     __upload_to_spl_cloud()
-    check_folder()
+    cloud.check_folder("data")
     sys.exit(0)
     

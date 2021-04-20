@@ -58,12 +58,12 @@ def main(yazaki_link):
 def __get_link_yazaki():
     # get yazaki link
     main(y.get_link())
-    # main(y.get_link_centrol())
+    main(y.get_link_centrol())
     
 
 def __upload_to_spl_cloud():
     # check data on floder
-    folder_target = ["receive", "orderplan"]
+    folder_target = cloud.check_folder("data")
     i = 0
     while i < len(folder_target):
         # show list file on folder_target
@@ -120,7 +120,7 @@ if __name__ == '__main__':
         __upload_to_spl_cloud()
 
     PsDb().excute_data(f"update tbt_refresh_gedis set refresh_status=true")
-
+    cloud.check_folder("data")
     sys.exit(0)
     
 

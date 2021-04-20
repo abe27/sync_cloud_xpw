@@ -153,3 +153,17 @@ class SplCloud:
         response = requests.request("POST", url, headers=headers, data=payload)
 
         print(response.text)
+
+    def check_folder(self, foldername):
+        import os
+        folder_a = os.listdir(foldername)
+        dir_name = []
+        for _i in folder_a:
+            if _i != ".gitkeep":
+                if len(os.listdir(f"{foldername}/{_i}")) > 0:
+                    dir_name.append(_i)
+
+                else:
+                    os.rmdir(f"{foldername}/{_i}")
+
+        return dir_name
