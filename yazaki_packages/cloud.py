@@ -55,6 +55,8 @@ class SplCloud:
             'upload_at': doc['upload_date'],
         }
 
+        print(doc['file_name'])
+
         files = [
             ('file_name', (doc['file_name'], open(
                 doc['file_path'], 'rb'), 'application/octet-stream'))
@@ -63,8 +65,11 @@ class SplCloud:
             'Authorization': f"Bearer {doc['token']}"
         }
 
+        
         response = requests.request(
             "POST", url, headers=headers, data=payload, files=files)
+
+        print(response.status_code)
         if response.status_code == 201:
             return True
 
