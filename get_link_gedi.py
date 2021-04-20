@@ -82,8 +82,9 @@ def main(yazaki_link):
 
 def __get_link_yazaki():
     # get yazaki link
-    main(y.get_link())
-    main(y.get_link_centrol())
+    # main(y.get_link())
+    # main(y.get_link_centrol())
+    print("start upload")
 
 def __upload_to_spl_cloud():
     # check data on floder
@@ -94,6 +95,7 @@ def __upload_to_spl_cloud():
         while i < len(folder_target):
             # show list file on folder_target
             fname = f"{app_path}/data/{folder_target[i]}"
+            print(fname)
             folder_list = os.listdir(fname)
             if len(folder_list) > 0:
                 line_doc = []
