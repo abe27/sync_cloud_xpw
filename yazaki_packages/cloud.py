@@ -55,7 +55,6 @@ class SplCloud:
             'upload_at': doc['upload_date'],
         }
 
-        print(doc['file_path'])
 
         files = [
             ('file_name', (doc['file_name'], open(
@@ -69,7 +68,6 @@ class SplCloud:
         response = requests.request(
             "POST", url, headers=headers, data=payload, files=files)
 
-        print(response.status_code)
         if response.status_code == 201:
             return True
 

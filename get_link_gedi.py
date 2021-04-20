@@ -82,15 +82,13 @@ def main(yazaki_link):
 
 def __get_link_yazaki():
     # get yazaki link
-    # main(y.get_link())
-    # main(y.get_link_centrol())
-    print("start upload")
+    main(y.get_link())
+    main(y.get_link_centrol())
 
 def __upload_to_spl_cloud():
     # check data on floder
     try:
         folder_target = check_folder()
-        print(list(folder_target))
         i = 0
         while i < len(folder_target):
             # show list file on folder_target
@@ -105,9 +103,7 @@ def __upload_to_spl_cloud():
                 yazaki_id = os.getenv('WHS_YAZAKI_USER')
 
             fname = f"{app_path}/data/{folder_target[i]}"
-            print(fname)
             folder_list = os.listdir(fname)
-            print(list(folder_list))
             if len(folder_list) > 0:
                 line_doc = []
                 token = cloud.get_token()
@@ -120,7 +116,6 @@ def __upload_to_spl_cloud():
                         if r != ".gitkeep":
                             # upload text file spl cloud
                             txt_append = f"{fname}/{r}"
-                            print(txt_append)
                             docs = {
                                 'yazaki_id': yazaki_id,
                                 'gedi_type': (folder_target[i]).upper(),
@@ -134,7 +129,7 @@ def __upload_to_spl_cloud():
                                 'token': token,
                             }
 
-                            print(list(docs))
+                            # print(list(docs))
                             
                             if cloud.upload_gedi_to_cloud(docs):
                                 line_doc.append(len(line_doc))
@@ -153,8 +148,8 @@ def __upload_to_spl_cloud():
                 line_doc = []
 
             i += 1
-    except Exception as ex:
-        cloud.linenotify_error(str(ex))
+    except:
+        # cloud.linenotify_error(str(ex))
         pass
 
 
