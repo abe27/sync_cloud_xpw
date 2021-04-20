@@ -94,7 +94,8 @@ def __download_gedi():
 def read_gedi_folder():
     # read gedi file
     try:
-        for i in cloud.check_floder("temp"):
+        
+        for i in SplCloud().check_folder("temp"):
             f_floder = f"./temp/{i}"
             list_dir = os.listdir(f_floder)
             for j in list_dir:
@@ -197,5 +198,5 @@ def read_gedi_folder():
 if __name__ == '__main__':
     __download_gedi()
     read_gedi_folder()
-    cloud.check_folder("temp")
+    SplCloud().check_folder("temp")
     sys.exit(0)
