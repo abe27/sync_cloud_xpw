@@ -94,9 +94,20 @@ def __upload_to_spl_cloud():
         i = 0
         while i < len(folder_target):
             # show list file on folder_target
+            yazaki_id = os.getenv('YAZAKI_USER')
+            if folder_target[i] == "orderplan":
+                yazaki_id = os.getenv('YAZAKI_USER')
+
+            elif folder_target[i] == "receive":
+                yazaki_id = os.getenv('YAZAKI_USER')
+
+            else:
+                yazaki_id = os.getenv('WHS_YAZAKI_USER')
+
             fname = f"{app_path}/data/{folder_target[i]}"
             print(fname)
             folder_list = os.listdir(fname)
+            print(list(folder_list))
             if len(folder_list) > 0:
                 line_doc = []
                 token = cloud.get_token()
@@ -105,11 +116,12 @@ def __upload_to_spl_cloud():
                     while x < len(folder_list):
                         # use text file only
                         r = folder_list[x]
+                        print(r)
                         if r != ".gitkeep":
                             # upload text file spl cloud
                             txt_append = f"{fname}/{r}"
                             docs = {
-                                'yazaki_id': os.getenv('YAZAKI_USER'),
+                                'yazaki_id': yazaki_id,
                                 'gedi_type': (folder_target[i]).upper(),
                                 'batch_id': r[:7],
                                 'file_name': (r[8:]).upper(),
