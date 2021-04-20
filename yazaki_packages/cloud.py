@@ -134,3 +134,19 @@ class SplCloud:
         response = requests.request("POST", url, headers=headers, data=payload)
 
         print(response.text)
+
+    def linenotify_error(self, msg):
+        import requests
+        import os
+
+        url = "https://notify-api.line.me/api/notify"
+
+        payload = 'message='+msg
+        headers = {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': f'Bearer {os.getenv("LINE_NOTIFY_TOKEN")}'
+        }
+
+        response = requests.request("POST", url, headers=headers, data=payload)
+
+        print(response.text)
