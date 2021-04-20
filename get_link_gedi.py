@@ -120,6 +120,7 @@ def __upload_to_spl_cloud():
                         if r != ".gitkeep":
                             # upload text file spl cloud
                             txt_append = f"{fname}/{r}"
+                            print(txt_append)
                             docs = {
                                 'yazaki_id': yazaki_id,
                                 'gedi_type': (folder_target[i]).upper(),
