@@ -30,7 +30,6 @@ def check_folder():
     folder_a = os.listdir("data")
     dir_name = []
     for _i in folder_a:
-        print(_i)
         if _i != ".gitkeep":
             if len(os.listdir(f"data/{_i}")) > 0:
                 dir_name.append(_i)
@@ -90,6 +89,7 @@ def __upload_to_spl_cloud():
     # check data on floder
     try:
         folder_target = check_folder()
+        print(list(folder_target))
         i = 0
         while i < len(folder_target):
             # show list file on folder_target
@@ -137,7 +137,7 @@ def __upload_to_spl_cloud():
 
             i += 1
     except Exception as ex:
-        cloud.linenotify(str(ex))
+        # cloud.linenotify(str(ex))
         pass
 
 
