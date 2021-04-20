@@ -75,7 +75,7 @@ class Yk:
         return (str(txt).replace("b", "")).replace("'", "")
 
     def __returnutfpono(self, txt):
-        return self.__repartname(txt)
+        return str(self.__repartname(txt)).strip()
 
     def __checknamepart(self, fac, part):
         p = str(part).lstrip().rstrip().replace('.', '')

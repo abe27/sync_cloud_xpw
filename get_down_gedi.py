@@ -172,17 +172,19 @@ def read_gedi_folder():
                         whsname = "CK2"
                         # read orderplan
                         docs = y.read_ck_orderplan(fname)
+                        i = 1
                         for a in docs:
                             sql_insert_db = f"""insert into tbt_order_datas
-                            (id, gedi_id,vendor, cd, unit, whs, tagrp, factory, sortg1, sortg2, sortg3, plantype, orderid, pono, recid, biac, shiptype, etdtap, partno, partname, pc, commercial, sampleflg, orderorgi, orderround, firmflg, shippedflg, shippedqty, ordermonth, balqty, bidrfl, deleteflg, ordertype, reasoncd, upddte, updtime, carriercode, bioabt, bicomd, bistdp, binewt, bigrwt, bishpc, biivpx, bisafn, biwidt, bihigh, bileng, lotno, minimum, maximum, picshelfbin, stkshelfbin, ovsshelfbin, picshelfbasicqty, outerpcs, allocateqty, sync, created_at, updated_at)
-                            values(uuid_generate_v4(), '{file_id}', '{a['vendor']}', '{a['cd']}', '{a['unit']}', '{a['whs']}', '{a['tagrp']}', '{a['factory']}', '{a['sortg1']}', '{a['sortg2']}', '{a['sortg3']}', '{a['plantype']}', '{a['orderid']}', '{a['pono']}', '{a['recid']}', '{a['biac']}', '{a['shiptype']}', '{a['etdtap']}', '{a['partno']}', '{a['partname']}', '{a['pc']}', '{a['commercial']}', '{a['sampleflg']}', '{a['orderorgi']}', '{a['orderround']}', '{a['firmflg']}', '{a['shippedflg']}', '{a['shippedqty']}', '{a['ordermonth']}', '{a['balqty']}', '{a['bidrfl']}', '{a['deleteflg']}', '{a['ordertype']}', '{a['reasoncd']}', '{a['upddte']}', '{a['updtime']}', '{a['carriercode']}', '{a['bioabt']}', '{a['bicomd']}', '{a['bistdp']}', '{a['binewt']}', '{a['bigrwt']}', '{a['bishpc']}', '{a['biivpx']}', '{a['bisafn']}', '{a['biwidt']}', '{a['bihigh']}', '{a['bileng']}', '{a['lotno']}', '{a['minimum']}', '{a['maximum']}', '{a['picshelfbin']}', '{a['stkshelfbin']}', '{a['ovsshelfbin']}', '{a['picshelfbasicqty']}', '{a['outerpcs']}', '{a['allocateqty']}', true, current_timestamp, current_timestamp)"""
-                            print(sql_insert_db)
+                            (id, gedi_id,seq,vendor, cd, unit, whs, tagrp, factory, sortg1, sortg2, sortg3, plantype, orderid, pono, recid, biac, shiptype, etdtap, partno, partname, pc, commercial, sampleflg, orderorgi, orderround, firmflg, shippedflg, shippedqty, ordermonth, balqty, bidrfl, deleteflg, ordertype, reasoncd, upddte, updtime, carriercode, bioabt, bicomd, bistdp, binewt, bigrwt, bishpc, biivpx, bisafn, biwidt, bihigh, bileng, lotno, minimum, maximum, picshelfbin, stkshelfbin, ovsshelfbin, picshelfbasicqty, outerpcs, allocateqty, sync, created_at, updated_at)
+                            values(uuid_generate_v4(), '{file_id}',{i}, '{a['vendor']}', '{a['cd']}', '{a['unit']}', '{a['whs']}', '{a['tagrp']}', '{a['factory']}', '{a['sortg1']}', '{a['sortg2']}', '{a['sortg3']}', '{a['plantype']}', '{a['orderid']}', '{a['pono']}', '{a['recid']}', '{a['biac']}', '{a['shiptype']}', '{a['etdtap']}', '{a['partno']}', '{a['partname']}', '{a['pc']}', '{a['commercial']}', '{a['sampleflg']}', '{a['orderorgi']}', '{a['orderround']}', '{a['firmflg']}', '{a['shippedflg']}', '{a['shippedqty']}', '{a['ordermonth']}', '{a['balqty']}', '{a['bidrfl']}', '{a['deleteflg']}', '{a['ordertype']}', '{a['reasoncd']}', '{a['upddte']}', '{a['updtime']}', '{a['carriercode']}', '{a['bioabt']}', '{a['bicomd']}', '{a['bistdp']}', '{a['binewt']}', '{a['bigrwt']}', '{a['bishpc']}', '{a['biivpx']}', '{a['bisafn']}', '{a['biwidt']}', '{a['bihigh']}', '{a['bileng']}', '{a['lotno']}', '{a['minimum']}', '{a['maximum']}', '{a['picshelfbin']}', '{a['stkshelfbin']}', '{a['ovsshelfbin']}', '{a['picshelfbasicqty']}', '{a['outerpcs']}', '{a['allocateqty']}', true, current_timestamp, current_timestamp)"""
+                            PsDb().excute_data(sql_insert_db)
+                            i += 1
                     else:
                         whsname = "RMW"
                         if i == "NARRIS":
                             fnme = fnme[len("NRRIS.32TE.SPL.ISSUENO."):]
-
-                    target_path = f'{os.getenv("HOME")}/GEDI/{whsname}/{i}'
+                    
+                    target_path = f'{os.getenv("HOME")}/GEDI/{whsname}/{i}/{datetime.now().strftime("%Y%m%d")}/'
                     if os.path.exists(target_path) is False:
                         os.makedirs(target_path)
 
