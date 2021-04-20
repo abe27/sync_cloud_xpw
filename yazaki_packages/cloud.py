@@ -55,7 +55,7 @@ class SplCloud:
             'upload_at': doc['upload_date'],
         }
 
-        print(doc['file_name'])
+        print(doc['file_path'])
 
         files = [
             ('file_name', (doc['file_name'], open(
