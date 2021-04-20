@@ -13,8 +13,8 @@ import sys
 import time
 
 from dotenv import load_dotenv
-app_path = f'{pathlib.Path().absolute()}'
-# app_path = f"/home/seiwa/webservice/sync_ck"
+# app_path = f'{pathlib.Path().absolute()}'
+app_path = f"/home/seiwa/webservice/sync_ck"
 env_path = f"{app_path}/.env"
 load_dotenv(env_path)
 
@@ -26,7 +26,7 @@ y = Yk()
 cloud = SplCloud()
 
 
-def check_floder():
+def check_folder():
     folder_a = os.listdir("data")
     dir_name = []
     for _i in folder_a:
@@ -87,59 +87,63 @@ def __get_link_yazaki():
 
 def __upload_to_spl_cloud():
     # check data on floder
-    folder_target = check_floder()
-    i = 0
-    while i < len(folder_target):
-        # show list file on folder_target
-        fname = f"{app_path}/data/{folder_target[i]}"
-        folder_list = os.listdir(fname)
-        if len(folder_list) > 0:
-            line_doc = []
-            token = cloud.get_token()
-            if token != False:
-                x = 0
-                while x < len(folder_list):
-                    # use text file only
-                    r = folder_list[x]
-                    if r != ".gitkeep":
-                        # upload text file spl cloud
-                        txt_append = f"{fname}/{r}"
-                        docs = {
-                            'yazaki_id': os.getenv('YAZAKI_USER'),
-                            'gedi_type': (folder_target[i]).upper(),
-                            'batch_id': r[:7],
-                            'file_name': (r[8:]).upper(),
-                            'file_path': f"{app_path}/data/{folder_target[i]}/{r}",
-                            'batch_size': os.path.getsize(txt_append),
-                            'upload_date': datetime.now().strftime('%Y-%m-%d %X'),
-                            'download': 0,
-                            'is_type': 'U',
-                            'token': token,
-                        }
-                        
-                        if cloud.upload_gedi_to_cloud(docs):
-                            line_doc.append(len(line_doc))
-                            # after upload remove text file
-                            os.remove(txt_append)
-                            print(
-                                colored(f"update data to spl cloud => {r}", "blue"))
+    try:
+        folder_target = check_folder()
+        i = 0
+        while i < len(folder_target):
+            # show list file on folder_target
+            fname = f"{app_path}/data/{folder_target[i]}"
+            folder_list = os.listdir(fname)
+            if len(folder_list) > 0:
+                line_doc = []
+                token = cloud.get_token()
+                if token != False:
+                    x = 0
+                    while x < len(folder_list):
+                        # use text file only
+                        r = folder_list[x]
+                        if r != ".gitkeep":
+                            # upload text file spl cloud
+                            txt_append = f"{fname}/{r}"
+                            docs = {
+                                'yazaki_id': os.getenv('YAZAKI_USER'),
+                                'gedi_type': (folder_target[i]).upper(),
+                                'batch_id': r[:7],
+                                'file_name': (r[8:]).upper(),
+                                'file_path': f"{app_path}/data/{folder_target[i]}/{r}",
+                                'batch_size': os.path.getsize(txt_append),
+                                'upload_date': datetime.now().strftime('%Y-%m-%d %X'),
+                                'download': 0,
+                                'is_type': 'U',
+                                'token': token,
+                            }
+                            
+                            if cloud.upload_gedi_to_cloud(docs):
+                                line_doc.append(len(line_doc))
+                                # after upload remove text file
+                                os.remove(txt_append)
+                                print(
+                                    colored(f"update data to spl cloud => {r}", "blue"))
 
-                    x += 1
+                        x += 1
 
-                # notifies on line message
-                if len(line_doc) > 0:
-                    msg = f"upload {(folder_target[i]).upper()}({len(line_doc)}) to XPW Online completed."
-                    cloud.linenotify(msg)
+                    # notifies on line message
+                    if len(line_doc) > 0:
+                        msg = f"upload {(folder_target[i]).upper()}({len(line_doc)}) to XPW Online completed."
+                        cloud.linenotify(msg)
 
-            line_doc = []
+                line_doc = []
 
-        i += 1
+            i += 1
+    except Exception as ex:
+        cloud.linenotify(str(ex))
+        pass
 
 
 
 if __name__ == '__main__':
     __get_link_yazaki()
     __upload_to_spl_cloud()
-    check_floder()
+    check_folder()
     sys.exit(0)
     
