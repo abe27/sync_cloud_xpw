@@ -166,6 +166,9 @@ def read_gedi_folder():
                             values(uuid_generate_v4(), '{file_id}',{seq}, '{a['vendor']}', '{a['cd']}', '{a['unit']}', '{a['whs']}', '{a['tagrp']}', '{a['factory']}', '{a['sortg1']}', '{a['sortg2']}', '{a['sortg3']}', '{a['plantype']}', '{a['orderid']}', '{a['pono']}', '{a['recid']}', '{a['biac']}', '{a['shiptype']}', '{a['etdtap']}', '{a['partno']}', '{a['partname']}', '{a['pc']}', '{a['commercial']}', '{a['sampleflg']}', '{a['orderorgi']}', '{a['orderround']}', '{a['firmflg']}', '{a['shippedflg']}', '{a['shippedqty']}', '{a['ordermonth']}', '{a['balqty']}', '{a['bidrfl']}', '{a['deleteflg']}', '{a['ordertype']}', '{a['reasoncd']}', '{a['upddte']}', '{a['updtime']}', '{a['carriercode']}', '{a['bioabt']}', '{a['bicomd']}', '{a['bistdp']}', '{a['binewt']}', '{a['bigrwt']}', '{a['bishpc']}', '{a['biivpx']}', '{a['bisafn']}', '{a['biwidt']}', '{a['bihigh']}', '{a['bileng']}', '{a['lotno']}', '{a['minimum']}', '{a['maximum']}', '{a['picshelfbin']}', '{a['stkshelfbin']}', '{a['ovsshelfbin']}', '{a['picshelfbasicqty']}', '{a['outerpcs']}', '{a['allocateqty']}', true, current_timestamp, current_timestamp)"""
                             PsDb().excute_data(sql_insert_db)
                             seq += 1
+
+                        PsDb().excute_data(f"update tbt_order_datas set sync=false where gedi_id='{file_id}'")
+                        
                     else:
                         whsname = "RMW"
                         if i == "NARRIS":
