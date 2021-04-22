@@ -34,19 +34,6 @@ def __insert_receive_ent(obj, gedi_id, tag_id, whs_id):
             f"select id from tbt_receive_headers where receive_no='{obj['receivingkey']}'")
     return rec_id
 
-# def check_floder():
-#     folder_a = os.listdir("temp")
-#     dir_name = []
-#     for _i in folder_a:
-#         if _i != ".gitkeep":
-#             if len(os.listdir(f"temp/{_i}")) > 0:
-#                 dir_name.append(_i)
-
-#             else:
-#                 os.rmdir(f"temp/{_i}")
-
-#     return dir_name
-
 def __download_gedi():
     # get download gedi
     obj = None
