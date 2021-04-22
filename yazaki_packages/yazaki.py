@@ -351,12 +351,13 @@ class Yk:
         obj = []
         try:
             import datetime
+            from datetime import timedelta
             import requests
             from bs4 import BeautifulSoup
             from termcolor import colored
             import os
 
-            etd = str(datetime.datetime.now().strftime('%Y%m%d'))
+            etd = str((datetime.datetime.now() - timedelta(days=3)).strftime('%Y%m%d'))
 
             # get cookies after login.
             session = self.__login_centrol()
@@ -403,12 +404,13 @@ class Yk:
         obj = []
         try:
             import datetime
+            from datetime import timedelta
             import requests
             from bs4 import BeautifulSoup
             from termcolor import colored
             import os
 
-            etd = str(datetime.datetime.now().strftime('%Y%m%d'))
+            etd = str((datetime.datetime.now() - timedelta(days=3)).strftime('%Y%m%d'))
 
             # get cookies after login.
             session = self.__login()
