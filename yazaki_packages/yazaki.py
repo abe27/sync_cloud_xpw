@@ -317,7 +317,6 @@ class Yk:
             resp = requests.request(
                 "POST", url, data=payload, headers=headers, verify=False, timeout=3)
             print(f"{os.getenv('WHS_YAZAKI_USER')} => login success")
-
         except Exception as msg:
             print(msg)
             sys.exit(0)
