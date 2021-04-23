@@ -4,6 +4,7 @@
 import os
 from yazaki_packages.cloud import SplCloud
 from yazaki_packages.yazaki import Yk
+from yazaki_packages.logs import Logging
 
 from datetime import datetime
 from termcolor import colored
@@ -13,8 +14,8 @@ import sys
 import time
 
 from dotenv import load_dotenv
-# app_path = f'{pathlib.Path().absolute()}'
-app_path = f"/home/seiwa/webservice/sync_ck"
+app_path = f'{pathlib.Path().absolute()}'
+# app_path = f"/home/seiwa/webservice/sync_ck"
 env_path = f"{app_path}/.env"
 load_dotenv(env_path)
 
@@ -101,11 +102,15 @@ def __upload_to_spl_cloud():
                         if r != ".gitkeep":
                             # upload text file spl cloud
                             txt_append = f"{fname}/{r}"
+                            txt_name = (r[8:]).upper()
+                            if txt_name[:1] == "N":
+                                txt_name = (r[8:]).upper()
+
                             docs = {
                                 'yazaki_id': yazaki_id,
                                 'gedi_type': (folder_target[i]).upper(),
                                 'batch_id': r[:7],
-                                'file_name': (r[8:]).upper(),
+                                'file_name': txt_name,
                                 'file_path': f"{app_path}/data/{folder_target[i]}/{r}",
                                 'batch_size': os.path.getsize(txt_append),
                                 'upload_date': datetime.now().strftime('%Y-%m-%d %X'),
@@ -135,12 +140,14 @@ def __upload_to_spl_cloud():
             i += 1
     except Exception as ex:
         # cloud.linenotify_error(str(ex))
+        Logging(f"UPLOAD", f"ERROR", str(ex))
+        print(str(ex))
         pass
 
 
 
 if __name__ == '__main__':
-    __get_link_yazaki()
+    # __get_link_yazaki()
     __upload_to_spl_cloud()
     cloud.check_folder("data")
     sys.exit(0)
