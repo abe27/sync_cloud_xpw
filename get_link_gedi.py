@@ -133,7 +133,7 @@ def __upload_to_spl_cloud():
                 line_doc = []
 
             i += 1
-    except:
+    except Exception as ex:
         cloud.linenotify_error(str(ex))
         pass
 
