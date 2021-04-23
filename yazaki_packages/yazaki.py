@@ -529,4 +529,3 @@ class Yk:
         import datetime
         from termcolor import colored
         print(colored("Yazaki Package Running At: " + str(datetime.datetime.now()), "magenta"))
-        Logging("START PROCESS" , "Yazaki Package Running At: " + str(datetime.datetime.now()), "INIT")
