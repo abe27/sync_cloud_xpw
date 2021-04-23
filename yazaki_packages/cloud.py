@@ -74,7 +74,7 @@ class SplCloud:
 
         else:
             print(response.status_code)
-            Logging("UPLOAD", f"UPLOAD {doc['file_name']} TO SPLCLOUD", response.status_code)
+            Logging(f"UPLOAD {doc['batch_id']}", f"UPLOAD {doc['file_name']} TO SPLCLOUD", response.status_code)
 
 
         return False
