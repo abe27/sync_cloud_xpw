@@ -162,14 +162,16 @@ class SplCloud:
 
     def check_folder(self, foldername):
         import os
-        folder_a = os.listdir(foldername)
+        import pathlib
+
+        folder_a = os.listdir(f"{pathlib.Path().absolute()}/{foldername}")
         dir_name = []
         for _i in folder_a:
             if _i != ".gitkeep":
-                if len(os.listdir(f"{foldername}/{_i}")) > 0:
+                if len(os.listdir(f"{pathlib.Path().absolute()}/{foldername}/{_i}")) > 0:
                     dir_name.append(_i)
 
                 else:
-                    os.rmdir(f"{foldername}/{_i}")
+                    os.rmdir(f"{pathlib.Path().absolute()}/{foldername}/{_i}")
 
         return dir_name
