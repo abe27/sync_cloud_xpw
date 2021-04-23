@@ -295,10 +295,10 @@ class Yk:
             resp = requests.request(
                 "POST", url, data=payload, headers=headers, verify=False, timeout=3)
             print(f"{os.getenv('YAZAKI_USER')} => login success")
-            Logging({os.getenv('YAZAKI_USER')} , f"{os.getenv('YAZAKI_USER')} login", "success")
+            Logging(os.getenv('YAZAKI_USER') , f"{os.getenv('YAZAKI_USER')} login", "success")
 
         except Exception as msg:
-            Logging({os.getenv('YAZAKI_USER')} , f"{os.getenv('YAZAKI_USER')} login", str(msg))
+            Logging(os.getenv('YAZAKI_USER') , f"{os.getenv('YAZAKI_USER')} login", str(msg))
             sys.exit(0)
 
         return resp
@@ -340,7 +340,7 @@ class Yk:
         requests.request("POST", url, data=pyload, headers=headers,
                              verify=False, timeout=3, cookies=session.cookies)
         print(f"{os.getenv('WHS_YAZAKI_USER')} => logout success")
-        Logging({os.getenv('WHS_YAZAKI_USER')} , f"{os.getenv('WHS_YAZAKI_USER')} logoute", "success")
+        Logging(os.getenv('WHS_YAZAKI_USER') , f"{os.getenv('WHS_YAZAKI_USER')} logout", "success")
         return True
 
     def __logout(self, session):
@@ -354,7 +354,7 @@ class Yk:
         requests.request("POST", url, data=pyload, headers=headers,
                              verify=False, timeout=3, cookies=session.cookies)
         print(f"{os.getenv('YAZAKI_USER')} => logout success")
-        Logging({os.getenv('YAZAKI_USER')} , f"{os.getenv('YAZAKI_USER')} login", "success")
+        Logging(os.getenv('YAZAKI_USER') , f"{os.getenv('YAZAKI_USER')} login", "success")
         return True
 
     def get_link_centrol(self):
@@ -402,12 +402,12 @@ class Yk:
                 # logout
                 if len(obj) > 0:
                     print(colored(f"found new link => {len(obj)}", "green"))
-                    Logging({os.getenv('WHS_YAZAKI_USER')} , f"{os.getenv('WHS_YAZAKI_USER')} get data {len(obj)}", "success")
+                    Logging(os.getenv('WHS_YAZAKI_USER') , f"{os.getenv('WHS_YAZAKI_USER')} get data {len(obj)}", "success")
 
                 self.__logout_centrol(session)
 
         except Exception as ex:
-            Logging({os.getenv('WHS_YAZAKI_USER')} , f"{os.getenv('WHS_YAZAKI_USER')} get data", str(ex))
+            Logging(os.getenv('WHS_YAZAKI_USER') , f"{os.getenv('WHS_YAZAKI_USER')} get data", str(ex))
             pass
 
         return obj
@@ -457,12 +457,12 @@ class Yk:
                 # logout
                 if len(obj) > 0:
                     print(colored(f"found new link => {len(obj)}", "green"))
-                    Logging({os.getenv('YAZAKI_USER')} , f"{os.getenv('YAZAKI_USER')} get data {len(obj)}", "success")
+                    Logging(os.getenv('YAZAKI_USER') , f"{os.getenv('YAZAKI_USER')} get data {len(obj)}", "success")
 
                 self.__logout(session)
 
         except Exception as ex:
-            Logging({os.getenv('YAZAKI_USER')} , f"{os.getenv('YAZAKI_USER')} get data", str(ex))
+            Logging(os.getenv('YAZAKI_USER') , f"{os.getenv('YAZAKI_USER')} get data", str(ex))
             pass
 
         return obj
@@ -486,12 +486,12 @@ class Yk:
                                       cookies=session.cookies, allow_redirects=True)
                     docs = BeautifulSoup(rq.content, 'lxml')
                     print(colored(f"download gedi {objtype} file : {(filename).upper()}", "blue"))
-                    Logging({os.getenv('YAZAKI_USER')} , f"download gedi {objtype} file : {(filename).upper()}", "success")
+                    Logging(os.getenv('YAZAKI_USER') , f"download gedi {objtype} file : {(filename).upper()}", "success")
                     # logout
                     self.__logout_centrol(session)
 
         except Exception as ex:
-            Logging({os.getenv('YAZAKI_USER')} , f"download gedi {objtype} file : {(filename).upper()}", str(ex))
+            Logging(os.getenv('YAZAKI_USER') , f"download gedi {objtype} file : {(filename).upper()}", str(ex))
             pass
 
         return docs
@@ -515,12 +515,12 @@ class Yk:
                                       cookies=session.cookies, allow_redirects=True)
                     docs = BeautifulSoup(rq.content, 'lxml')
                     print(colored(f"download gedi {objtype} file : {(filename).upper()}", "blue"))
-                    Logging({os.getenv('WHS_YAZAKI_USER')} , f"download gedi {objtype} file : {(filename).upper()}", "success")
+                    Logging(os.getenv('WHS_YAZAKI_USER') , f"download gedi {objtype} file : {(filename).upper()}", "success")
                     # logout
                     self.__logout(session)
 
         except Exception as ex:
-            Logging({os.getenv('WHS_YAZAKI_USER')} , f"download gedi {objtype} file : {(filename).upper()}", str(ex))
+            Logging(os.getenv('WHS_YAZAKI_USER') , f"download gedi {objtype} file : {(filename).upper()}", str(ex))
             pass
 
         return docs
