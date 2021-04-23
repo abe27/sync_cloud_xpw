@@ -282,6 +282,8 @@ class Yk:
         import urllib
         import urllib3
         import requests
+        from yazaki_packages.logs import Logging
+
         resp = False
         try:
             # login yazaki website.
@@ -293,9 +295,10 @@ class Yk:
             resp = requests.request(
                 "POST", url, data=payload, headers=headers, verify=False, timeout=3)
             print(f"{os.getenv('YAZAKI_USER')} => login success")
+            Logging({os.getenv('YAZAKI_USER')} , f"{os.getenv('YAZAKI_USER')} login", "success")
 
         except Exception as msg:
-            print(msg)
+            Logging({os.getenv('YAZAKI_USER')} , f"{os.getenv('YAZAKI_USER')} login", str(msg))
             sys.exit(0)
 
         return resp
@@ -306,6 +309,7 @@ class Yk:
         import urllib
         import urllib3
         import requests
+        from yazaki_packages.logs import Logging
         resp = False
         try:
             # login yazaki website.
@@ -317,8 +321,10 @@ class Yk:
             resp = requests.request(
                 "POST", url, data=payload, headers=headers, verify=False, timeout=3)
             print(f"{os.getenv('WHS_YAZAKI_USER')} => login success")
+            Logging({os.getenv('WHS_YAZAKI_USER')} , f"{os.getenv('WHS_YAZAKI_USER')} login", "success")
+
         except Exception as msg:
-            print(msg)
+            Logging({os.getenv('WHS_YAZAKI_USER')} , f"{os.getenv('WHS_YAZAKI_USER')} login", str(msg))
             sys.exit(0)
 
         return resp
@@ -326,6 +332,7 @@ class Yk:
     def __logout_centrol(self, session):
         import requests
         import os
+        from yazaki_packages.logs import Logging
 
         url = f"https://{os.getenv('YAZAKI_HOST')}:{os.getenv('YAZAKI_PORT')}/cehttp/servlet/MailboxServlet?operation=LOGOFF"
         headers = {}
@@ -333,11 +340,13 @@ class Yk:
         requests.request("POST", url, data=pyload, headers=headers,
                              verify=False, timeout=3, cookies=session.cookies)
         print(f"{os.getenv('WHS_YAZAKI_USER')} => logout success")
+        Logging({os.getenv('WHS_YAZAKI_USER')} , f"{os.getenv('WHS_YAZAKI_USER')} logoute", "success")
         return True
 
     def __logout(self, session):
         import requests
         import os
+        from yazaki_packages.logs import Logging
 
         url = f"https://{os.getenv('YAZAKI_HOST')}:{os.getenv('YAZAKI_PORT')}/cehttp/servlet/MailboxServlet?operation=LOGOFF"
         headers = {}
@@ -345,6 +354,7 @@ class Yk:
         requests.request("POST", url, data=pyload, headers=headers,
                              verify=False, timeout=3, cookies=session.cookies)
         print(f"{os.getenv('YAZAKI_USER')} => logout success")
+        Logging({os.getenv('YAZAKI_USER')} , f"{os.getenv('YAZAKI_USER')} login", "success")
         return True
 
     def get_link_centrol(self):
@@ -355,6 +365,7 @@ class Yk:
             import requests
             from bs4 import BeautifulSoup
             from termcolor import colored
+            from yazaki_packages.logs import Logging
             import os
 
             etd = str((datetime.datetime.now() - timedelta(days=4)).strftime('%Y%m%d'))
@@ -391,11 +402,12 @@ class Yk:
                 # logout
                 if len(obj) > 0:
                     print(colored(f"found new link => {len(obj)}", "green"))
+                    Logging({os.getenv('WHS_YAZAKI_USER')} , f"{os.getenv('WHS_YAZAKI_USER')} get data {len(obj)}", "success")
 
                 self.__logout_centrol(session)
 
         except Exception as ex:
-            print(ex)
+            Logging({os.getenv('WHS_YAZAKI_USER')} , f"{os.getenv('WHS_YAZAKI_USER')} get data", str(ex))
             pass
 
         return obj
@@ -408,6 +420,7 @@ class Yk:
             import requests
             from bs4 import BeautifulSoup
             from termcolor import colored
+            from yazaki_packages.logs import Logging
             import os
 
             etd = str((datetime.datetime.now() - timedelta(days=4)).strftime('%Y%m%d'))
@@ -444,11 +457,12 @@ class Yk:
                 # logout
                 if len(obj) > 0:
                     print(colored(f"found new link => {len(obj)}", "green"))
+                    Logging({os.getenv('YAZAKI_USER')} , f"{os.getenv('YAZAKI_USER')} get data {len(obj)}", "success")
 
                 self.__logout(session)
 
         except Exception as ex:
-            print(ex)
+            Logging({os.getenv('YAZAKI_USER')} , f"{os.getenv('YAZAKI_USER')} get data", str(ex))
             pass
 
         return obj
@@ -458,6 +472,7 @@ class Yk:
         import requests
         from bs4 import BeautifulSoup
         from termcolor import colored
+        from yazaki_packages.logs import Logging
         import os
 
         session = self.__login_centrol()
@@ -471,11 +486,12 @@ class Yk:
                                       cookies=session.cookies, allow_redirects=True)
                     docs = BeautifulSoup(rq.content, 'lxml')
                     print(colored(f"download gedi {objtype} file : {(filename).upper()}", "blue"))
+                    Logging({os.getenv('YAZAKI_USER')} , f"download gedi {objtype} file : {(filename).upper()}", "success")
                     # logout
                     self.__logout_centrol(session)
 
         except Exception as ex:
-            print(ex)
+            Logging({os.getenv('YAZAKI_USER')} , f"download gedi {objtype} file : {(filename).upper()}", str(ex))
             pass
 
         return docs
@@ -485,6 +501,7 @@ class Yk:
         import requests
         from bs4 import BeautifulSoup
         from termcolor import colored
+        from yazaki_packages.logs import Logging
         import os
 
         session = self.__login()
@@ -498,11 +515,12 @@ class Yk:
                                       cookies=session.cookies, allow_redirects=True)
                     docs = BeautifulSoup(rq.content, 'lxml')
                     print(colored(f"download gedi {objtype} file : {(filename).upper()}", "blue"))
+                    Logging({os.getenv('WHS_YAZAKI_USER')} , f"download gedi {objtype} file : {(filename).upper()}", "success")
                     # logout
                     self.__logout(session)
 
         except Exception as ex:
-            print(ex)
+            Logging({os.getenv('WHS_YAZAKI_USER')} , f"download gedi {objtype} file : {(filename).upper()}", str(ex))
             pass
 
         return docs
@@ -510,4 +528,6 @@ class Yk:
     def __init__(self):
         import datetime
         from termcolor import colored
+        from yazaki_packages.logs import Logging
         print(colored("Yazaki Package Running At: " + str(datetime.datetime.now()), "magenta"))
+        Logging("START PROCESS" , f"", "INIT")
