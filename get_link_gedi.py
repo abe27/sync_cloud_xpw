@@ -134,7 +134,7 @@ def __upload_to_spl_cloud():
 
             i += 1
     except:
-        # cloud.linenotify_error(str(ex))
+        cloud.linenotify_error(str(ex))
         pass
 
 
