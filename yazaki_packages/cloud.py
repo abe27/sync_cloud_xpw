@@ -164,6 +164,9 @@ class SplCloud:
         import os
         import pathlib
 
+        if os.path.exists(f"{pathlib.Path().absolute()}/{foldername}") != False:
+            os.makedirs(f"{pathlib.Path().absolute()}/{foldername}")
+
         folder_a = os.listdir(f"{pathlib.Path().absolute()}/{foldername}")
         dir_name = []
         for _i in folder_a:
