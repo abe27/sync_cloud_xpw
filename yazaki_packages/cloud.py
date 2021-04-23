@@ -69,7 +69,6 @@ class SplCloud:
         response = requests.request(
             "POST", url, headers=headers, data=payload, files=files)
 
-        print(response.content)
         if response.status_code == 201:
             return True
 
