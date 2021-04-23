@@ -357,7 +357,7 @@ class Yk:
             from termcolor import colored
             import os
 
-            etd = str((datetime.datetime.now() - timedelta(days=3)).strftime('%Y%m%d'))
+            etd = str((datetime.datetime.now() - timedelta(days=4)).strftime('%Y%m%d'))
 
             # get cookies after login.
             session = self.__login_centrol()
@@ -410,7 +410,7 @@ class Yk:
             from termcolor import colored
             import os
 
-            etd = str((datetime.datetime.now() - timedelta(days=3)).strftime('%Y%m%d'))
+            etd = str((datetime.datetime.now() - timedelta(days=4)).strftime('%Y%m%d'))
 
             # get cookies after login.
             session = self.__login()
