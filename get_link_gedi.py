@@ -14,8 +14,8 @@ import sys
 import time
 
 from dotenv import load_dotenv
-app_path = f'{pathlib.Path().absolute()}'
-# app_path = f"/home/seiwa/webservice/sync_ck"
+# app_path = f'{pathlib.Path().absolute()}'
+app_path = f"/home/seiwa/webservice/sync_ck"
 env_path = f"{app_path}/.env"
 load_dotenv(env_path)
 
