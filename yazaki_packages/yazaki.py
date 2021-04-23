@@ -528,6 +528,5 @@ class Yk:
     def __init__(self):
         import datetime
         from termcolor import colored
-        from yazaki_packages.logs import Logging
         print(colored("Yazaki Package Running At: " + str(datetime.datetime.now()), "magenta"))
-        Logging("START PROCESS" , f"", "INIT")
+        Logging("START PROCESS" , "Yazaki Package Running At: " + str(datetime.datetime.now()), "INIT")
