@@ -140,7 +140,7 @@ def __upload_to_spl_cloud():
 
 
 if __name__ == '__main__':
-    # __get_link_yazaki()
+    __get_link_yazaki()
     __upload_to_spl_cloud()
     cloud.check_folder("data")
     sys.exit(0)
