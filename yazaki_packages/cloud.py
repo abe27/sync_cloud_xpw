@@ -47,6 +47,7 @@ class SplCloud:
     def upload_gedi_to_cloud(self, doc):
         import requests
         import os
+        from yazaki_packages.logs import Logging
 
         url = f"http://{os.getenv('SPL_HOSTNAME')}/api/v1/filegedi/store"
 
@@ -70,6 +71,11 @@ class SplCloud:
 
         if response.status_code == 201:
             return True
+
+        else:
+            print(response.status_code)
+            Logging("UPLOAD", "UPLOAD TEXT TO SPLCLOUD", response.status_code)
+
 
         return False
 
