@@ -329,7 +329,7 @@ class Yk:
 
         return resp
 
-    def __logout_centrol(self, session):
+    def __logout_central(self, session):
         import requests
         import os
         from yazaki_packages.logs import Logging
