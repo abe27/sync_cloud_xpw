@@ -18,5 +18,5 @@ class Logging():
             l = len(lines.readlines()) + 1
 
         f = open(logfilename, mode='a+')
-        f.writelines(f"{(str(l)+'.').ljust(5)}{str(datetime.datetime.now().strftime('%Y-%m-%d %X')).ljust(25)}{str(args[0]).ljust(10)}{str(args[1]).ljust(70)}{(str(args[2]).lower()).ljust(5)}\n")
+        f.writelines(f"{(str(l)+'.').ljust(5)}{str(datetime.datetime.now().strftime('%Y-%m-%d %X')).ljust(25)}{str(args[0]).ljust(10)}{str(args[1]).ljust(90)}{(str(args[2]).lower()).ljust(5)}\n")
         f.close()

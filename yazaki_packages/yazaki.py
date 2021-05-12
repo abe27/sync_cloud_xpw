@@ -486,12 +486,12 @@ class Yk:
                                       cookies=session.cookies, allow_redirects=True)
                     docs = BeautifulSoup(rq.content, 'lxml')
                     print(colored(f"download gedi {objtype} file : {(filename).upper()}", "blue"))
-                    Logging(os.getenv('YAZAKI_USER') , f"download gedi {objtype} file : {(filename).upper()}", "success")
+                    Logging(os.getenv('WHS_YAZAKI_USER') , f"download gedi {objtype} file : {(filename).upper()}", "success")
                     # logout
                     self.__logout_centrol(session)
 
         except Exception as ex:
-            Logging(os.getenv('YAZAKI_USER') , f"download gedi {objtype} file : {(filename).upper()}", 'error: ' + str(ex))
+            Logging(os.getenv('WHS_YAZAKI_USER') , f"download gedi {objtype} file : {(filename).upper()}", 'error: ' + str(ex))
             pass
 
         return docs
@@ -515,12 +515,12 @@ class Yk:
                                       cookies=session.cookies, allow_redirects=True)
                     docs = BeautifulSoup(rq.content, 'lxml')
                     print(colored(f"download gedi {objtype} file : {(filename).upper()}", "blue"))
-                    Logging(os.getenv('WHS_YAZAKI_USER') , f"download gedi {objtype} file : {(filename).upper()}", "success")
+                    Logging(os.getenv('YAZAKI_USER') , f"download gedi {objtype} file : {(filename).upper()}", "success")
                     # logout
                     self.__logout(session)
 
         except Exception as ex:
-            Logging(os.getenv('WHS_YAZAKI_USER') , f"download gedi {objtype} file : {(filename).upper()}", 'error: ' + str(ex))
+            Logging(os.getenv('YAZAKI_USER') , f"download gedi {objtype} file : {(filename).upper()}", 'error: ' + str(ex))
             pass
 
         return docs
