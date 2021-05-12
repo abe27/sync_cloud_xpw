@@ -129,8 +129,23 @@ def read_gedi_folder():
                                     db.excute_data(sql_insert_recdb)
                                 part_name = db.get_fetch_one(
                                     f"select id from tbt_part_masters where partno='{r['partno']}'")
+
+                                if part_name is False:
+                                    db.excute_data(f"insert into tbt_part_masters(id, partno, description,is_status, created_at, updated_at)values(uuid_generate_v4(), '{r['partno']}', '{r['partno']}',true, current_timestamp, current_timestamp)")
+                                    part_name = db.get_fetch_one(f"select id from tbt_part_masters where partno='{r['partno']}'")
+
                                 part_id = db.get_fetch_one(
                                     f"select id from tbt_parts where part_id='{part_name}' and whs_id='{whs_id}'")
+
+                                if part_id is False:
+                                    vendor_id = db.get_fetch_one(f"select id from tbt_part_vendors where title='UNKNOW'")
+                                    part_type_id = db.get_fetch_one(f"select id from tbt_part_types where title='PART'")
+                                    db.excute_data(f"""insert into tbt_parts(id, vendor_id, part_id, whs_id, part_type_id, width, length, height, weight, is_status, created_at, updated_at)
+                                    values(uuid_generate_v4(), '{vendor_id}', '{part_name}', '{whs_id}', '{part_type_id}', '0', '0', '0', '0', true, current_timestamp, current_timestamp)""")
+                                    
+                                    part_id = db.get_fetch_one(
+                                    f"select id from tbt_parts where part_id='{part_name}' and whs_id='{whs_id}'")
+
                                 rec_id = __insert_receive_ent(
                                     r, file_id, tag_id, whs_id)
                                 part_seq = db.get_fetch_one(
