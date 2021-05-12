@@ -467,7 +467,7 @@ class Yk:
 
         return obj
 
-    def download_central(self, objtype, filename, filelink):
+    def download_central(self, currentdate, objtype, filename, filelink):
         from datetime import datetime
         import requests
         from bs4 import BeautifulSoup
@@ -486,7 +486,7 @@ class Yk:
                                       cookies=session.cookies, allow_redirects=True)
                     docs = BeautifulSoup(rq.content, 'lxml')
                     print(colored(f"download gedi {objtype} file : {(filename).upper()}", "blue"))
-                    Logging(os.getenv('WHS_YAZAKI_USER') , f"download gedi {objtype} file : {(filename).upper()}", "success")
+                    Logging(os.getenv('WHS_YAZAKI_USER') , f"download {objtype} file : {(filename).upper()} upload_at: {str(currentdate)}", "success")
                     # logout
                     self.__logout_central(session)
 
@@ -515,7 +515,7 @@ class Yk:
                                       cookies=session.cookies, allow_redirects=True)
                     docs = BeautifulSoup(rq.content, 'lxml')
                     print(colored(f"download gedi {objtype} file : {(filename).upper()}", "blue"))
-                    Logging(os.getenv('YAZAKI_USER') , f"download {objtype} file : {(filename).upper()}", "success")
+                    Logging(os.getenv('YAZAKI_USER') , f"download {objtype} file : {(filename).upper()} upload_at: {str(currentdate)}", "success")
                     # logout
                     self.__logout(session)
 
