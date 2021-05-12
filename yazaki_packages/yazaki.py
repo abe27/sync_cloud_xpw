@@ -357,7 +357,7 @@ class Yk:
         Logging(os.getenv('YAZAKI_USER') , f"{os.getenv('YAZAKI_USER')} logout", "success")
         return True
 
-    def get_link_centrol(self):
+    def get_link_central(self):
         obj = []
         try:
             import datetime
@@ -475,7 +475,7 @@ class Yk:
         from yazaki_packages.logs import Logging
         import os
 
-        session = self.__login_centrol()
+        session = self.__login_central()
 
         docs = False
         try:
