@@ -298,7 +298,7 @@ class Yk:
             Logging(os.getenv('YAZAKI_USER') , f"{os.getenv('YAZAKI_USER')} login", "success")
 
         except Exception as msg:
-            Logging(os.getenv('YAZAKI_USER') , f"{os.getenv('YAZAKI_USER')} login", str(msg))
+            Logging(os.getenv('YAZAKI_USER') , f"{os.getenv('YAZAKI_USER')} login", 'error: ' + str(msg))
             sys.exit(0)
 
         return resp
@@ -324,7 +324,7 @@ class Yk:
             Logging({os.getenv('WHS_YAZAKI_USER')} , f"{os.getenv('WHS_YAZAKI_USER')} login", "success")
 
         except Exception as msg:
-            Logging({os.getenv('WHS_YAZAKI_USER')} , f"{os.getenv('WHS_YAZAKI_USER')} login", str(msg))
+            Logging({os.getenv('WHS_YAZAKI_USER')} , f"{os.getenv('WHS_YAZAKI_USER')} login", 'error: ' + str(msg))
             sys.exit(0)
 
         return resp
@@ -354,7 +354,7 @@ class Yk:
         requests.request("POST", url, data=pyload, headers=headers,
                              verify=False, timeout=3, cookies=session.cookies)
         print(f"{os.getenv('YAZAKI_USER')} => logout success")
-        Logging(os.getenv('YAZAKI_USER') , f"{os.getenv('YAZAKI_USER')} login", "success")
+        Logging(os.getenv('YAZAKI_USER') , f"{os.getenv('YAZAKI_USER')} logout", "success")
         return True
 
     def get_link_centrol(self):
@@ -407,7 +407,7 @@ class Yk:
                 self.__logout_centrol(session)
 
         except Exception as ex:
-            Logging(os.getenv('WHS_YAZAKI_USER') , f"{os.getenv('WHS_YAZAKI_USER')} get data", str(ex))
+            Logging(os.getenv('WHS_YAZAKI_USER') , f"{os.getenv('WHS_YAZAKI_USER')} get data", 'error: ' + str(ex))
             pass
 
         return obj
@@ -462,7 +462,7 @@ class Yk:
                 self.__logout(session)
 
         except Exception as ex:
-            Logging(os.getenv('YAZAKI_USER') , f"{os.getenv('YAZAKI_USER')} get data", str(ex))
+            Logging(os.getenv('YAZAKI_USER') , f"{os.getenv('YAZAKI_USER')} get data", 'error: ' + str(ex))
             pass
 
         return obj
@@ -491,7 +491,7 @@ class Yk:
                     self.__logout_centrol(session)
 
         except Exception as ex:
-            Logging(os.getenv('YAZAKI_USER') , f"download gedi {objtype} file : {(filename).upper()}", str(ex))
+            Logging(os.getenv('YAZAKI_USER') , f"download gedi {objtype} file : {(filename).upper()}", 'error: ' + str(ex))
             pass
 
         return docs
@@ -520,7 +520,7 @@ class Yk:
                     self.__logout(session)
 
         except Exception as ex:
-            Logging(os.getenv('WHS_YAZAKI_USER') , f"download gedi {objtype} file : {(filename).upper()}", str(ex))
+            Logging(os.getenv('WHS_YAZAKI_USER') , f"download gedi {objtype} file : {(filename).upper()}", 'error: ' + str(ex))
             pass
 
         return docs
