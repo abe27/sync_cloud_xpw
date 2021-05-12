@@ -31,10 +31,10 @@ def main(yazaki_link):
         for i in yazaki_link:
             docs = []
             if i.objtype == "RMW":
-                docs = y.download_centrol(i.filetype, i.batchfile, i.linkfile())
+                docs = y.download_central(i. currentdate,i.filetype, i.batchfile, i.linkfile())
 
             else:
-                docs = y.download(i.filetype, i.batchfile, i.linkfile())
+                docs = y.download(i.currentdate, i.filetype, i.batchfile, i.linkfile())
 
             if docs != False:
 

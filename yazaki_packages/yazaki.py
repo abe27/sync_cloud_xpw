@@ -303,7 +303,7 @@ class Yk:
 
         return resp
 
-    def __login_centrol(self):
+    def __login_central(self):
         import sys
         import os
         import urllib
@@ -371,7 +371,7 @@ class Yk:
             etd = str((datetime.datetime.now() - timedelta(days=0)).strftime('%Y%m%d'))
 
             # get cookies after login.
-            session = self.__login_centrol()
+            session = self.__login_central()
             if session.status_code == 200:
                 # get html page
                 url = f"https://{os.getenv('YAZAKI_HOST')}:{os.getenv('YAZAKI_PORT')}/cehttp/servlet/MailboxServlet"
@@ -404,7 +404,7 @@ class Yk:
                     print(colored(f"found new link => {len(obj)}", "green"))
                     Logging(os.getenv('WHS_YAZAKI_USER') , f"{os.getenv('WHS_YAZAKI_USER')} get data {len(obj)}", "success")
 
-                self.__logout_centrol(session)
+                self.__logout_central(session)
 
         except Exception as ex:
             Logging(os.getenv('WHS_YAZAKI_USER') , f"{os.getenv('WHS_YAZAKI_USER')} get data", 'error: ' + str(ex))
@@ -467,7 +467,7 @@ class Yk:
 
         return obj
 
-    def download_centrol(self, objtype, filename, filelink):
+    def download_central(self, objtype, filename, filelink):
         from datetime import datetime
         import requests
         from bs4 import BeautifulSoup
@@ -488,7 +488,7 @@ class Yk:
                     print(colored(f"download gedi {objtype} file : {(filename).upper()}", "blue"))
                     Logging(os.getenv('WHS_YAZAKI_USER') , f"download gedi {objtype} file : {(filename).upper()}", "success")
                     # logout
-                    self.__logout_centrol(session)
+                    self.__logout_central(session)
 
         except Exception as ex:
             Logging(os.getenv('WHS_YAZAKI_USER') , f"download gedi {objtype} file : {(filename).upper()}", 'error: ' + str(ex))
@@ -496,7 +496,7 @@ class Yk:
 
         return docs
 
-    def download(self, objtype, filename, filelink):
+    def download(self, currentdate, objtype, filename, filelink):
         from datetime import datetime
         import requests
         from bs4 import BeautifulSoup
@@ -515,12 +515,12 @@ class Yk:
                                       cookies=session.cookies, allow_redirects=True)
                     docs = BeautifulSoup(rq.content, 'lxml')
                     print(colored(f"download gedi {objtype} file : {(filename).upper()}", "blue"))
-                    Logging(os.getenv('YAZAKI_USER') , f"download gedi {objtype} file : {(filename).upper()}", "success")
+                    Logging(os.getenv('YAZAKI_USER') , f"download {objtype} file : {(filename).upper()}", "success")
                     # logout
                     self.__logout(session)
 
         except Exception as ex:
-            Logging(os.getenv('YAZAKI_USER') , f"download gedi {objtype} file : {(filename).upper()}", 'error: ' + str(ex))
+            Logging(os.getenv('YAZAKI_USER') , f"download {objtype} file : {(filename).upper()}", 'error: ' + str(ex))
             pass
 
         return docs
