@@ -139,3 +139,5 @@ cython_debug/
 
 data/**/*.txt
 temp/**/**/*.txt
+
+GEDI/
