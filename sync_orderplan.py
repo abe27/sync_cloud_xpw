@@ -1,5 +1,13 @@
 from yazaki_packages.db import PsDb, OraDB, WmsDb
-from yazaki_packages.cloud import SplCloud
+
+import pathlib
+
+from dotenv import load_dotenv
+app_path = f'{pathlib.Path().absolute()}'
+# app_path = f"/home/seiwa/webservice/sync_service"
+env_path = f"{app_path}/.env"
+
+load_dotenv(env_path)
 
 def main():
     sql = f"""select id,gedi_id,seq,vendor,cd,unit,whs,tagrp,factory,sortg1,sortg2,sortg3,plantype,orderid,pono,recid,biac,shiptype,etdtap,partno,partname,pc,commercial,sampleflg,orderorgi,orderround,firmflg,shippedflg,shippedqty,ordermonth,balqty,bidrfl,deleteflg,ordertype,reasoncd,upddte,updtime,carriercode,bioabt,bicomd,bistdp,binewt,bigrwt,bishpc,biivpx,bisafn,biwidt,bihigh,bileng,lotno,minimum,maximum,picshelfbin,stkshelfbin,ovsshelfbin,picshelfbasicqty,outerpcs,allocateqty,sync,created_at,updated_at 
