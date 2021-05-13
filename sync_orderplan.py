@@ -1,3 +1,5 @@
+import sys
+import uuid
 from yazaki_packages.db import PsDb, OraDB, WmsDb
 
 import pathlib
@@ -8,6 +10,51 @@ app_path = f'{pathlib.Path().absolute()}'
 env_path = f"{app_path}/.env"
 
 load_dotenv(env_path)
+
+def sync_order_to_ora(r):
+    ord_id              = r[0]
+    factory             = r[8]
+    orderid             = r[13]
+    pono                = r[14]
+    biac                = r[16]
+    shiptype            = r[17]
+    etdtap              = r[18]
+    partno              = r[19]
+    partname            = str(r[20]).replace("'", "''")
+    pc                  = r[21]
+    commercial          = r[22]
+    sampleflg           = r[23]
+    orderorgi           = r[24]
+    orderround          = r[25]
+    firmflg             = r[26]
+    shippedflg          = r[27]
+    shippedqty          = r[28]
+    ordermonth          = r[29]
+    balqty              = r[30]
+    bidrfl              = r[31]
+    deleteflg           = r[32]
+    ordertype           = r[33]
+    reasoncd            = r[34]
+    carriercode         = r[37]
+    bioabt              = r[38]
+    bicomd              = r[39]
+    bistdp              = r[40]
+    binewt              = r[41]
+    bigrwt              = r[42]
+    bishpc              = r[43]
+    biivpx              = r[44]
+    bisafn              = r[45]
+    biwidt              = r[46]
+    bihigh              = r[47]
+    bileng              = r[48]
+    lotno               = r[49]
+    allocateqty         = r[57]
+
+    
+    sql = f"""INSERT INTO TXP_ORDERPLAN(FACTORY, SHIPTYPE, AFFCODE, PONO, ETDTAP, PARTNO, PARTNAME, ORDERMONTH, ORDERORGI, ORDERROUND, BALQTY, SHIPPEDFLG, SHIPPEDQTY, PC, COMMERCIAL, SAMPFLG, CARRIERCODE, ORDERTYPE, UPDDTE, ALLOCATEQTY, BIDRFL, DELETEFLG, REASONCD, BIOABT, FIRMFLG, BICOMD, BISTDP, BINEWT, BIGRWT, BISHPC, BIIVPX, BISAFN, BILENG, BIWIDT, BIHIGH, CURINV, OLDINV, SYSDTE, POUPDFLAG, UUID, CREATEDBY, MODIFIEDBY, LOTNO, ORDERSTATUS, ORDERID, STATUS, ORDSYNC)
+    VALUES('{factory}', '{shiptype}','{biac}', '{str(pono).strip()}', to_date('{str(etdtap)[:10]}', 'YYYY-MM-DD'), '{partno}', '{partname}', to_date('{str(ordermonth)}', 'YYYY-MM-DD'), '{orderorgi}', '{orderround}', '{balqty}', '{shippedflg}', '{shippedqty}', '{pc}', '{commercial}', '{sampleflg}', '{carriercode}', '{ordertype}', SYSDATE, '{allocateqty}', '{bidrfl}', '{deleteflg}', '{reasoncd}', '{bioabt}', '{firmflg}', '{bicomd}', '{bistdp}', '{binewt}', '{bigrwt}', '{bishpc}', '{biivpx}', '{bisafn}', '{bileng}', '{biwidt}', '{bihigh}', '', '', SYSDATE, '', '{ord_id}', 'SYS', 'SYS', '{lotno}', 0, '{str(orderid).strip()}', 1, 0)"""
+    OraDB().excute_data(sql)
+    print(f"insert {ord_id}")
 
 def main():
     sql = f"""select id,gedi_id,seq,vendor,cd,unit,whs,tagrp,factory,sortg1,sortg2,sortg3,plantype,orderid,pono,recid,biac,shiptype,etdtap,partno,partname,pc,commercial,sampleflg,orderorgi,orderround,firmflg,shippedflg,shippedqty,ordermonth,balqty,bidrfl,deleteflg,ordertype,reasoncd,upddte,updtime,carriercode,bioabt,bicomd,bistdp,binewt,bigrwt,bishpc,biivpx,bisafn,biwidt,bihigh,bileng,lotno,minimum,maximum,picshelfbin,stkshelfbin,ovsshelfbin,picshelfbasicqty,outerpcs,allocateqty,sync,created_at,updated_at 
@@ -21,22 +68,7 @@ def main():
     while i < len(docs):
         r = docs[i]
         ord_id              = r[0]
-        # gedi_id             = r[1]
-        seq                 = r[2]
-        vendor              = r[3]
-        cd                  = r[4]
-        unit                = r[5]
-        whs                 = r[6]
-        tagrp               = r[7]
-        factory             = r[8]
-        sortg1              = r[9]
-        sortg2              = r[10]
-        sortg3              = r[11]
-        plantype            = r[12]
-        orderid             = r[13]
         pono                = r[14]
-        recid               = r[15]
-        biac                = r[16]
         shiptype            = r[17]
         etdtap              = r[18]
         partno              = r[19]
@@ -55,8 +87,6 @@ def main():
         deleteflg           = r[32]
         ordertype           = r[33]
         reasoncd            = r[34]
-        upddte              = r[35]
-        updtime             = r[36]
         carriercode         = r[37]
         bioabt              = r[38]
         bicomd              = r[39]
@@ -65,26 +95,16 @@ def main():
         bigrwt              = r[42]
         bishpc              = r[43]
         biivpx              = r[44]
-        bisafn              = r[45]
         biwidt              = r[46]
         bihigh              = r[47]
         bileng              = r[48]
         lotno               = r[49]
-        minimum             = r[50]
-        maximum             = r[51]
-        picshelfbin         = r[52]
-        stkshelfbin         = r[53]
-        ovsshelfbin         = r[54]
-        picshelfbasicqty    = r[55]
-        outerpcs            = r[56]
         allocateqty         = r[57]
-
 
         # create order header
         user_id             =   0
         terr_id             =   None
         fac_id              =   None
-        cust_id             =   None
         fac_title           =   None
         group_title         =   None
 
@@ -107,7 +127,6 @@ def main():
             terr_id             =   o[0]
             user_id             =   o[1]
             fac_id              =   o[2]
-            cust_id             =   o[3]
             fac_title           =   o[4]
             group_title         =   o[5]
 
@@ -242,10 +261,13 @@ def main():
         # PsDb().excute_data(sql_insert_header)
         # order_header_uuid = PsDb().get_fetch_one(sql_order_header)
 
+        # insert db to oracle
+        sync_order_to_ora(r)
         # update status sync
         PsDb().excute_data(f"update tbt_order_datas set sync=true where id='{ord_id}'")
         i += 1
 
 if __name__ == '__main__':
     main()
+    sys.exit(0)
     
