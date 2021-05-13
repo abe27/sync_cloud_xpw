@@ -151,11 +151,11 @@ def main():
                 ord_plan_custid_id='{terr_id}' and 
                 user_id='{user_id}'"""
 
-            order_uuid_id = False
-            if txt == "M" or txt == "D" or txt == "S" or txt == "L" or txt == "Q" or txt == "1" or txt == "2":
-                order_uuid_id = WmsDb().get_fetch_one(sql_order)
+            # order_uuid_id = False
+            # if txt == "M" or txt == "D" or txt == "S" or txt == "L" or txt == "Q" or txt == "1" or txt == "2":
+            #     order_uuid_id = WmsDb().get_fetch_one(sql_order)
             
-            
+            order_uuid_id = WmsDb().get_fetch_one(sql_order)
             if order_uuid_id != False:
                 sql_insert_order = f"""update tbt_orderplans
                 set ord_plan_grpordno='{order_id}', ord_plan_etdtap='{etdtap}', ord_plan_shippedflg='{shippedflg}', ord_plan_pc='{pc}', ord_plan_commercial='{commercial}', ord_plan_sampflg='{sampleflg}', ord_plan_ordertype='{ordertype}', ord_plan_bidrfl='{bidrfl}', ord_plan_bioabt={bioabt}, ord_plan_firmflg='{firmflg}', ord_plan_biivpx='{biivpx}', ord_plan_invoice=false, ord_plan_grp_reason=false,ord_plan_sync=false,ord_plan_updated_at=current_timestamp, ora_plan_shiptype_id='{shiptype_id}', ora_plan_whs_id='{whs_id}', ora_plan_zone_id='{zone_id}', ord_plan_custid_id='{terr_id}', ord_plan_file_gedi_id='{gedi_id}', user_id={user_id}, ord_plan_status=false, ord_plan_split=false
@@ -192,6 +192,10 @@ def main():
             else:
                 WmsDb().excute_data(insert_order_body)
 
+            item_ctn = WmsDb().get_fetch_one(f"select count(*) from tbt_orderplanbodys where ord_body_grpordno_id='{order_uuid_id}'")
+            part_ctn = WmsDb().get_fetch_one(f"select sum(ord_body_balqty/ord_body_bistdp) from tbt_orderplanbodys where '{order_uuid_id}'")
+
+            WmsDb().excute_data(f"""update tbt_orderplans set ord_plan_updated_at=current_timestamp,ord_plan_item='{item_ctn}', ord_plan_ctn='{part_ctn}' where ord_plan_id='{order_uuid_id}'""")
             print(f"{order_uuid_id} order partid: {partid_id}")
 
 
