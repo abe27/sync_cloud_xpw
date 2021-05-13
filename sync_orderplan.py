@@ -193,7 +193,7 @@ def main():
                 WmsDb().excute_data(insert_order_body)
 
             item_ctn = WmsDb().get_fetch_one(f"select count(*) from tbt_orderplanbodys where ord_body_grpordno_id='{order_uuid_id}'")
-            part_ctn = WmsDb().get_fetch_one(f"select sum(ord_body_balqty/ord_body_bistdp) from tbt_orderplanbodys where '{order_uuid_id}'")
+            part_ctn = WmsDb().get_fetch_one(f"select sum(ord_body_balqty/ord_body_bistdp) from tbt_orderplanbodys where ord_body_grpordno_id='{order_uuid_id}'")
 
             WmsDb().excute_data(f"""update tbt_orderplans set ord_plan_updated_at=current_timestamp,ord_plan_item='{item_ctn}', ord_plan_ctn='{part_ctn}' where ord_plan_id='{order_uuid_id}'""")
             print(f"{order_uuid_id} order partid: {partid_id}")
