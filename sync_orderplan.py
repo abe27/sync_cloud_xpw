@@ -40,7 +40,7 @@ def main():
         shiptype            = r[17]
         etdtap              = r[18]
         partno              = r[19]
-        partname            = str(r[20]).replace("'", "'''")
+        partname            = str(r[20]).replace("'", "''")
         pc                  = r[21]
         commercial          = r[22]
         sampleflg           = r[23]
