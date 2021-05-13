@@ -157,8 +157,8 @@ def main():
                 
             whs_id = WmsDb().get_fetch_one(f"select whs_id from tbm_whs where whs_title='C'")
             # order_id_key = __PsFetchOne(f"select uuid_generate_v4()")
-            sql_insert_order = f"""insert into tbt_orderplans(ord_plan_id, ord_plan_grpordno, ord_plan_etdtap, ord_plan_shippedflg, ord_plan_pc, ord_plan_commercial, ord_plan_sampflg, ord_plan_ordertype, ord_plan_bidrfl, ord_plan_bioabt, ord_plan_firmflg, ord_plan_biivpx, ord_plan_poupdflag, ord_plan_item, ord_plan_ctn, ord_plan_invoice, ord_plan_grp_reason, ord_plan_sync, ord_plan_split, ord_plan_created_at, ord_plan_updated_at, ora_plan_shiptype_id, ora_plan_whs_id, ora_plan_zone_id, ord_plan_custid_id, ord_plan_file_gedi_id, user_id)
-            values(uuid_generate_v4(), '{order_id}', '{etdtap}', '{shippedflg}', '{pc}', '{commercial}', '{sampleflg}', '{ordertype}', '{bidrfl}',  {bioabt}, '{firmflg}', '{biivpx}', '', 0, 0, false, false, false, false, current_timestamp, current_timestamp, '{shiptype_id}', '{whs_id}', '{zone_id}', '{terr_id}', '{gedi_id}', '{user_id}')"""
+            sql_insert_order = f"""insert into tbt_orderplans(ord_plan_id, ord_plan_grpordno, ord_plan_etdtap, ord_plan_shippedflg, ord_plan_pc, ord_plan_commercial, ord_plan_sampflg, ord_plan_ordertype, ord_plan_bidrfl, ord_plan_bioabt, ord_plan_firmflg, ord_plan_biivpx, ord_plan_poupdflag, ord_plan_item, ord_plan_ctn, ord_plan_status, ord_plan_invoice, ord_plan_grp_reason, ord_plan_sync, ord_plan_split, ord_plan_created_at, ord_plan_updated_at, ora_plan_shiptype_id, ora_plan_whs_id, ora_plan_zone_id, ord_plan_custid_id, ord_plan_file_gedi_id, user_id)
+            values(uuid_generate_v4(), '{order_id}', '{etdtap}', '{shippedflg}', '{pc}', '{commercial}', '{sampleflg}', '{ordertype}', '{bidrfl}',  {bioabt}, '{firmflg}', '{biivpx}', '', 0, 0, false, false, false, false, false, current_timestamp, current_timestamp, '{shiptype_id}', '{whs_id}', '{zone_id}', '{terr_id}', '{gedi_id}', '{user_id}')"""
             sql_order = f"""
                 select ord_plan_id from tbt_orderplans where 
                 ord_plan_grpordno='{order_id}' and 
