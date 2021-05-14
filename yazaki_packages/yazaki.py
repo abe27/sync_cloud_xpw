@@ -267,7 +267,7 @@ class Yk:
                     "allocateqty": 0,
                     "sync": False,
                     "uuid": uuidcode,
-                    "updatedon": datetime.now()
+                    "updatedon": datetime.strptime(str(self.__trimtxt(line[141:(141 + 14)])), '%Y%m%d%H%M%S')
                 })
             except Exception as ex:
                 print(ex)
