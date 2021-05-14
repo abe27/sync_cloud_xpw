@@ -1,6 +1,7 @@
 import sys
 import uuid
 from yazaki_packages.db import PsDb, OraDB, WmsDb
+from yazaki_packages.cloud import SplCloud
 
 import pathlib
 
@@ -269,6 +270,10 @@ def main():
         # update status sync
         PsDb().excute_data(f"update tbt_order_datas set sync=true where id='{ord_id}'")
         i += 1
+
+    if len(docs) > 0:
+        msg = f"download order({len(docs)}) complease!"
+        SplCloud().linenotify(msg)
 
 if __name__ == '__main__':
     main()
