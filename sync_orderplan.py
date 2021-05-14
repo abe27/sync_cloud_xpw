@@ -62,12 +62,12 @@ def main():
         where sync=false
         order by created_at,gedi_id,seq"""
 
-    gedi_id = WmsDb().get_fetch_one(f"select file_id from tbm_filegedis where file_name='NONE'")
     docs = PsDb().get_fetch_all(sql)
     i = 0
     while i < len(docs):
         r = docs[i]
         ord_id              = r[0]
+        factory             = WmsDb().get_fetch_one(f"select fac_id from tbm_factorys where fac_title='{r[8]}'")
         pono                = r[14]
         shiptype            = r[17]
         etdtap              = r[18]
@@ -101,6 +101,9 @@ def main():
         lotno               = r[49]
         allocateqty         = r[57]
 
+
+        gedi_id = WmsDb().get_fetch_one(f"select file_id from tbm_filegedis where file_name like '{r[8]}%'")
+
         # create order header
         user_id             =   0
         terr_id             =   None
@@ -113,7 +116,7 @@ def main():
             inner join tbm_factorys f on t.terr_cust_factory_id = f.fac_id
             inner join auth_user u on t.terr_user_id = u.id
             inner join tbm_ordergroupbys b on t.terr_cust_ordergroup_id = b.order_group_id 
-            where c.consignee='{bishpc}' and t.terr_case_shipment like '%{shiptype}%'""")
+            where c.consignee='{bishpc}' and f.fac_id='{factory}' and t.terr_case_shipment like '%{shiptype}%'""")
 
         if cust_obj is None:
             cust_obj = WmsDb().get_fetch_all(f"""select terr_id,id,fac_id,cust_id,fac_title,b.order_group_title from tbm_territories t
@@ -121,7 +124,7 @@ def main():
                 inner join tbm_factorys f on t.terr_cust_factory_id = f.fac_id
                 inner join auth_user u on t.terr_user_id = u.id
                 inner join tbm_ordergroupbys b on t.terr_cust_ordergroup_id = b.order_group_id 
-                where c.consignee='{bishpc}' and t.terr_case_shipment like '%-%'""")
+                where c.consignee='{bishpc}' and f.fac_id='{factory}' and t.terr_case_shipment like '%-%'""")
 
         for o in cust_obj:
             terr_id             =   o[0]
