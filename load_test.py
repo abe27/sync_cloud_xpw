@@ -15,7 +15,8 @@ def main():
         upload_time='{str(_date)}',
         created_at='{str(_date)}',
         updated_at='{str(_date)}',
-        user_id='65d0bc07-8ce4-4eed-8abd-a25bf389301b',
+        yazaki_id='65d0bc07-8ce4-4eed-8abd-a25bf389301b',
+        user_id='2afb9037-0690-4a1b-aebe-04f17a9ba451',
         gedi_type_id='711b7af0-02f7-4437-b59b-c6d09c74da1b'
         where id='{i[0]}'"""
         PsDb().excute_data(sql_update)
