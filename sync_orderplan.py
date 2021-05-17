@@ -55,6 +55,7 @@ def sync_order_to_ora(r):
     sql = f"""INSERT INTO TXP_ORDERPLAN(FACTORY, SHIPTYPE, AFFCODE, PONO, ETDTAP, PARTNO, PARTNAME, ORDERMONTH, ORDERORGI, ORDERROUND, BALQTY, SHIPPEDFLG, SHIPPEDQTY, PC, COMMERCIAL, SAMPFLG, CARRIERCODE, ORDERTYPE, UPDDTE, ALLOCATEQTY, BIDRFL, DELETEFLG, REASONCD, BIOABT, FIRMFLG, BICOMD, BISTDP, BINEWT, BIGRWT, BISHPC, BIIVPX, BISAFN, BILENG, BIWIDT, BIHIGH, CURINV, OLDINV, SYSDTE, POUPDFLAG, UUID, CREATEDBY, MODIFIEDBY, LOTNO, ORDERSTATUS, ORDERID, STATUS, ORDSYNC)
     VALUES('{factory}', '{shiptype}','{biac}', '{str(pono).strip()}', to_date('{str(etdtap)[:10]}', 'YYYY-MM-DD'), '{partno}', '{partname}', to_date('{str(ordermonth)}', 'YYYY-MM-DD'), '{orderorgi}', '{orderround}', '{balqty}', '{shippedflg}', '{shippedqty}', '{pc}', '{commercial}', '{sampleflg}', '{carriercode}', '{ordertype}', SYSDATE, '{allocateqty}', '{bidrfl}', '{deleteflg}', '{reasoncd}', '{bioabt}', '{firmflg}', '{bicomd}', '{bistdp}', '{binewt}', '{bigrwt}', '{bishpc}', '{biivpx}', '{bisafn}', '{bileng}', '{biwidt}', '{bihigh}', '', '', SYSDATE, '', '{ord_id}', 'SYS', 'SYS', '{lotno}', 0, '{str(orderid).strip()}', 1, 0)"""
     OraDB().excute_data(sql)
+
     print(f"insert {ord_id}")
 
 def main():
@@ -268,6 +269,7 @@ def main():
         # insert db to oracle
         sync_order_to_ora(r)
         # update status sync
+        WmsDb().excute_data(f"""update tbt_orderplans set ord_plan_sync=true where ord_plan_id='{ord_id}'""")
         PsDb().excute_data(f"update tbt_order_datas set sync=true where id='{ord_id}'")
         i += 1
 
