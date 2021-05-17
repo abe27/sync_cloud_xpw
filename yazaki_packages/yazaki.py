@@ -368,7 +368,7 @@ class Yk:
             from yazaki_packages.logs import Logging
             import os
 
-            etd = str((datetime.datetime.now() - timedelta(days=1)).strftime('%Y%m%d'))
+            etd = str((datetime.datetime.now() - timedelta(days=4)).strftime('%Y%m%d'))
 
             # get cookies after login.
             session = self.__login_central()
@@ -423,7 +423,7 @@ class Yk:
             from yazaki_packages.logs import Logging
             import os
 
-            etd = str((datetime.datetime.now() - timedelta(days=1)).strftime('%Y%m%d'))
+            etd = str((datetime.datetime.now() - timedelta(days=4)).strftime('%Y%m%d'))
 
             # get cookies after login.
             session = self.__login()
