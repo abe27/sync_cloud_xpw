@@ -85,6 +85,17 @@ def main():
         SplCloud().linenotify(msg)
         i += 1
 
+def check_db_sync():
+    sql = f"""select t.id from tbt_receive_headers t 
+    inner join tbt_receive_bodys b on t.id = b.receive_id 
+    where b.sync=false
+    group by t.id"""
+    doc = PsDb().get_fetch_all(sql)
+
+    while i in doc:
+        PsDb().excute_data(f"update tbt_receive_headers set sync=false where id='{i[0]}'")
+
 if __name__ == '__main__':
+    check_db_sync()
     main()
     sys.exit(0)
