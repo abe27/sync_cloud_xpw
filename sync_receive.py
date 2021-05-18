@@ -92,7 +92,7 @@ def check_db_sync():
     group by t.id"""
     doc = PsDb().get_fetch_all(sql)
 
-    while i in doc:
+    for i in doc:
         PsDb().excute_data(f"update tbt_receive_headers set sync=false where id='{i[0]}'")
 
 if __name__ == '__main__':
