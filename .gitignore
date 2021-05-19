@@ -141,3 +141,5 @@ data/**/*.txt
 temp/**/**/*.txt
 
 GEDI/
+
+.vscode/
