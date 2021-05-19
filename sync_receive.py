@@ -87,6 +87,7 @@ def read_db(keys):
         i += 1
 
 def check_db_sync():
+    f = False
     sql = f"""select t.id,t.receive_no from tbt_receive_headers t 
     inner join tbt_receive_bodys b on t.id = b.receive_id 
     where b.sync=false
@@ -96,6 +97,11 @@ def check_db_sync():
     for i in doc:
         PsDb().excute_data(f"update tbt_receive_headers set sync=false where id='{i[0]}'")
         DBLogging("SYSTEM" , f"{i[0]} SYNC {i[1]}", "ERROR")
+
+    if len(doc) > 0:
+        f = True
+
+    return f
 
 def main():
     sql = f"""select t.id from tbt_receive_headers t 
@@ -109,5 +115,6 @@ def main():
 
 if __name__ == '__main__':
     main()
-    check_db_sync()
+    if check_db_sync():
+        main()
     sys.exit(0)
