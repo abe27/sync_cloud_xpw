@@ -5,6 +5,8 @@ class PsDb:
     def get_fetch_one(self, sql):
         import os
         import psycopg2
+        from yazaki_packages.logs import DBLogging
+        
         conn = psycopg2.connect(host=os.getenv("DB_HOST"), port=os.getenv("DB_PORT"), database=os.getenv(
             "DB_NAME"), user=os.getenv("DB_USER"), password=os.getenv("DB_PASSWD"))
         i = 0
@@ -22,6 +24,7 @@ class PsDb:
         except Exception as e:
             print(sql)
             print(str(e))
+            DBLogging("WMS_DB" , f"FETCH ONE", str(e))
             cur.close()
 
         return i
@@ -29,6 +32,8 @@ class PsDb:
     def get_fetch_all(self, sql):
         import os
         import psycopg2
+        from yazaki_packages.logs import DBLogging
+
         obj = None
         try:
             conn = psycopg2.connect(host=os.getenv("DB_HOST"), port=os.getenv("DB_PORT"), database=os.getenv(
@@ -38,12 +43,15 @@ class PsDb:
             obj = cur.fetchall()
         except Exception as ex:
             print(ex)
+            DBLogging("PS_DB" , f"FETCH ALL ERROR", str(ex))
             pass
         return obj
 
     def excute_data(self, sql):
         import os
         import psycopg2
+        from yazaki_packages.logs import DBLogging
+
         conn = psycopg2.connect(host=os.getenv("DB_HOST"), port=os.getenv("DB_PORT"), database=os.getenv(
             "DB_NAME"), user=os.getenv("DB_USER"), password=os.getenv("DB_PASSWD"))
         cur = conn.cursor()
@@ -54,6 +62,7 @@ class PsDb:
         except Exception as e:
             print(sql)
             print(str(e))
+            DBLogging("PS_DB" , f"ERROR EXCUTE", str(e))
             conn.rollback()
             pass
 
@@ -136,6 +145,8 @@ class WmsDb:
     def get_fetch_one(self, sql):
         import os
         import psycopg2
+        from yazaki_packages.logs import DBLogging
+
         conn = psycopg2.connect(host=os.getenv("DB_WMS_HOST"), port=os.getenv("DB_WMS_PORT"), database=os.getenv(
             "DB_WMS_NAME"), user=os.getenv("DB_WMS_USER"), password=os.getenv("DB_WMS_PASSWD"))
         i = 0
@@ -153,6 +164,7 @@ class WmsDb:
         except Exception as e:
             print(sql)
             print(str(e))
+            DBLogging("WMS_DB" , f"FETCH ONE", str(e))
             cur.close()
 
         return i
@@ -160,6 +172,8 @@ class WmsDb:
     def get_fetch_all(self, sql):
         import os
         import psycopg2
+        from yazaki_packages.logs import DBLogging
+
         obj = None
         try:
             conn = psycopg2.connect(host=os.getenv("DB_WMS_HOST"), port=os.getenv("DB_WMS_PORT"), database=os.getenv(
@@ -169,12 +183,15 @@ class WmsDb:
             obj = cur.fetchall()
         except Exception as ex:
             print(ex)
+            DBLogging("WMS_DB" , f"FETCH ALL ERROR", str(ex))
             pass
         return obj
 
     def excute_data(self, sql):
         import os
         import psycopg2
+        from yazaki_packages.logs import DBLogging
+
         conn = psycopg2.connect(host=os.getenv("DB_WMS_HOST"), port=os.getenv("DB_WMS_PORT"), database=os.getenv(
             "DB_WMS_NAME"), user=os.getenv("DB_WMS_USER"), password=os.getenv("DB_WMS_PASSWD"))
         cur = conn.cursor()
@@ -185,6 +202,7 @@ class WmsDb:
         except Exception as e:
             print(sql)
             print(str(e))
+            DBLogging("WMS_DB" , f"ERROR EXCUTE", str(e))
             conn.rollback()
             pass
 
