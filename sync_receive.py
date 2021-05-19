@@ -14,7 +14,7 @@ load_dotenv(env_path)
 
 
 def read_db(keys):
-    docs = PsDb().get_fetch_all("select id,case when substring(receive_no, 1, 2) = 'TI' then 'INJ' else 'AW' end factory ,receive_date,receive_no from tbt_receive_headers where id='{keys}'")
+    docs = PsDb().get_fetch_all(f"select id,case when substring(receive_no, 1, 2) = 'TI' then 'INJ' else 'AW' end factory ,receive_date,receive_no from tbt_receive_headers where id='{keys}'")
     i = 0
     while i < len(docs):
         r = docs[i]
