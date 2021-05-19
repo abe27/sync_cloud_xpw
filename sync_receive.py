@@ -1,6 +1,6 @@
 from yazaki_packages.db import PsDb, OraDB
 from yazaki_packages.cloud import SplCloud
-from yazaki_packages.logs import Logging
+from yazaki_packages.logs import Logging, DBLogging
 from datetime import datetime
 import pathlib
 import sys
@@ -95,7 +95,7 @@ def check_db_sync():
 
     for i in doc:
         PsDb().excute_data(f"update tbt_receive_headers set sync=false where id='{i[0]}'")
-        Logging("SYSTEM" , f"{i[0]} SYNC {i[1]}", "ERROR")
+        DBLogging("SYSTEM" , f"{i[0]} SYNC {i[1]}", "ERROR")
 
 def main():
     sql = f"""select t.id from tbt_receive_headers t 
