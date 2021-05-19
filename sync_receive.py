@@ -66,9 +66,9 @@ def read_db(keys):
                                 (RECEIVINGKEY, RECEIVINGSEQ, PARTNO, PLNQTY, PLNCTN,RECQTY,RECCTN,TAGRP, UNIT, CD, WHS, DESCRI, RVMANAGINGNO,UPDDTE, SYSDTE, CREATEDBY,MODIFIEDBY,OLDERKEY)
                                 VALUES('{rec_no}', '{running_seq}', '{part_no}', {rec_body_qty}, {rec_body_pln_ctn},0,0,'C', '{unit_title}','{coils_name}' , '{rec_tag}','{part_desc}', '{rvno}',sysdate, sysdate, 'SKTSYS', 'SKTSYS', '{rec_no}')""")
 
-            OraDB().excute_data(sql_rec_body)
-
-            PsDb().excute_data(f"update tbt_receive_bodys set sync=true where id='{j[10]}'")
+            if OraDB().excute_data(sql_rec_body):
+                PsDb().excute_data(f"update tbt_receive_bodys set sync=true where id='{j[10]}'")
+                
             print(j)
 
         sql_insert_ent = f"""UPDATE TXP_RECTRANSENT SET RECEIVINGMAX='{len(doc_body)}',RECPLNCTN='{plnctn}' WHERE RECEIVINGKEY='{rec_no}'"""

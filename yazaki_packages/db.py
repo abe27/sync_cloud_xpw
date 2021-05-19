@@ -121,6 +121,7 @@ class OraDB:
         import cx_Oracle
         from yazaki_packages.logs import DBLogging
 
+        f = True
         conn = cx_Oracle.connect(os.getenv("ORA_STR"))
         cur = conn.cursor()
         try:
@@ -130,12 +131,13 @@ class OraDB:
         except Exception as e:
             print(sql)
             print(str(e))
+            f = False
             DBLogging("ORA_DB" , f"ERROR EXCUTE", str(e))
             conn.rollback()
             pass
 
         cur.close()
-        return True
+        return f
 
 
 class WmsDb:
