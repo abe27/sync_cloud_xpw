@@ -15,6 +15,8 @@ load_dotenv(env_path)
 
 def read_db(keys):
     docs = PsDb().get_fetch_all(f"select id,case when substring(receive_no, 1, 2) = 'TI' then 'INJ' else 'AW' end factory ,receive_date,receive_no from tbt_receive_headers where id='{keys}'")
+    
+    rec_no = None
     i = 0
     while i < len(docs):
         r = docs[i]
@@ -68,7 +70,7 @@ def read_db(keys):
 
             if OraDB().excute_data(sql_rec_body):
                 PsDb().excute_data(f"update tbt_receive_bodys set sync=true where id='{j[10]}'")
-                
+
             print(j)
 
         sql_insert_ent = f"""UPDATE TXP_RECTRANSENT SET RECEIVINGMAX='{len(doc_body)}',RECPLNCTN='{plnctn}' WHERE RECEIVINGKEY='{rec_no}'"""
@@ -82,7 +84,10 @@ def read_db(keys):
         PsDb().excute_data(f"update tbt_receive_headers set sync=true where id='{rec_id}'")
         print(r)
         print(f"==========================================================================")
-        msg = f"FACTORY: {rec_tag}\nRECEIVENO: {rec_no}\nITEM: {len(doc_body)} PLN: {plnctn}\nAT: {datetime.now().strftime('%Y-%m-%d %X')}"
+
+        main_item = OraDB().get_fetch_one(f"SELECT count(PLNCTN)||'/'||sum(PLNCTN) FROM TXP_RECTRANSBODY WHERE receivingkey='{rec_no}'")
+        sub_item = PsDb().get_fetch_one(f"select count(t.plan_ctn)||'/'||sum(t.plan_ctn) from tbt_receive_bodys t where t.receive_id='{rec_id}'")
+        msg = f"FACTORY: {rec_tag}\nRECEIVENO: {rec_no}\MAIN: {main_item} GEDI: {sub_item}\nAT: {datetime.now().strftime('%Y-%m-%d %X')}"
         SplCloud().linenotify(msg)
         i += 1
 
