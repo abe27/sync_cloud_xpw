@@ -1,5 +1,6 @@
 from yazaki_packages.db import PsDb, OraDB
 from yazaki_packages.cloud import SplCloud
+from yazaki_packages.logs import Logging
 from datetime import datetime
 import pathlib
 import sys
@@ -12,8 +13,8 @@ env_path = f"{app_path}/.env"
 load_dotenv(env_path)
 
 
-def main():
-    docs = PsDb().get_fetch_all("select id,case when substring(receive_no, 1, 2) = 'TI' then 'INJ' else 'AW' end factory ,receive_date,receive_no from tbt_receive_headers where sync=false")
+def read_db(keys):
+    docs = PsDb().get_fetch_all("select id,case when substring(receive_no, 1, 2) = 'TI' then 'INJ' else 'AW' end factory ,receive_date,receive_no from tbt_receive_headers where id='{keys}'")
     i = 0
     while i < len(docs):
         r = docs[i]
@@ -86,6 +87,17 @@ def main():
         i += 1
 
 def check_db_sync():
+    sql = f"""select t.id,t.receive_no from tbt_receive_headers t 
+    inner join tbt_receive_bodys b on t.id = b.receive_id 
+    where b.sync=false
+    group by t.id,t.receive_no"""
+    doc = PsDb().get_fetch_all(sql)
+
+    for i in doc:
+        PsDb().excute_data(f"update tbt_receive_headers set sync=false where id='{i[0]}'")
+        Logging("SYSTEM" , f"{i[0]} SYNC {i[1]}", "ERROR")
+
+def main():
     sql = f"""select t.id from tbt_receive_headers t 
     inner join tbt_receive_bodys b on t.id = b.receive_id 
     where b.sync=false
@@ -93,9 +105,9 @@ def check_db_sync():
     doc = PsDb().get_fetch_all(sql)
 
     for i in doc:
-        PsDb().excute_data(f"update tbt_receive_headers set sync=false where id='{i[0]}'")
+        read_db(i[0])
 
 if __name__ == '__main__':
-    check_db_sync()
     main()
+    check_db_sync()
     sys.exit(0)

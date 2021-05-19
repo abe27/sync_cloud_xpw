@@ -68,6 +68,8 @@ class OraDB:
     def get_fetch_one(self, sql):
         import os
         import cx_Oracle
+        from yazaki_packages.logs import Logging
+
         conn = cx_Oracle.connect(os.getenv("ORA_STR"))
         i = 0
         cur = conn.cursor()
@@ -84,6 +86,7 @@ class OraDB:
         except Exception as e:
             print(sql)
             print(str(e))
+            Logging("ORA_DB" , f"ERROR FETCH ONE", str(e))
             cur.close()
 
         return i
@@ -91,6 +94,8 @@ class OraDB:
     def get_fetch_all(self, sql):
         import os
         import cx_Oracle
+        from yazaki_packages.logs import Logging
+
         try:
             conn = cx_Oracle.connect(os.getenv("ORA_STR"))
             cur = conn.cursor()
@@ -98,12 +103,15 @@ class OraDB:
             obj = cur.fetchall()
         except Exception as ex:
             print(ex)
+            Logging("ORA_DB" , f"ERROR FETCH ALL", str(ex))
             pass
         return obj
 
     def excute_data(self, sql):
         import os
         import cx_Oracle
+        from yazaki_packages.logs import Logging
+
         conn = cx_Oracle.connect(os.getenv("ORA_STR"))
         cur = conn.cursor()
         try:
@@ -113,6 +121,7 @@ class OraDB:
         except Exception as e:
             print(sql)
             print(str(e))
+            Logging("ORA_DB" , f"ERROR EXCUTE", str(e))
             conn.rollback()
             pass
 
