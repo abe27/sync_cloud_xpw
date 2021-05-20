@@ -88,13 +88,11 @@ def read_db(keys):
         main_item = OraDB().get_fetch_one(f"SELECT count(PLNCTN)||'/'||sum(PLNCTN) FROM TXP_RECTRANSBODY WHERE receivingkey='{rec_no}'")
         sub_item = PsDb().get_fetch_one(f"select count(t.plan_ctn)||'/'||sum(t.plan_ctn) from tbt_receive_bodys t where t.receive_id='{rec_id}'")
 
-        txt_msg = f"MAIN: {main_item} GEDI: {sub_item}"
         if str(main_item) == str(sub_item):
             main_item = OraDB().get_fetch_one(f"SELECT 'ITEM: '||count(PLNCTN)||' CTN: '||sum(PLNCTN) FROM TXP_RECTRANSBODY WHERE receivingkey='{rec_no}'")
-            txt_msg = f"{main_item}"
+            msg = f"FACTORY: {rec_tag}\nRECEIVENO: {rec_no}\n{main_item}\nAT: {datetime.now().strftime('%Y-%m-%d %X')}"
+            SplCloud().linenotify(msg)
 
-        msg = f"FACTORY: {rec_tag}\nRECEIVENO: {rec_no}\n{txt_msg}\nAT: {datetime.now().strftime('%Y-%m-%d %X')}"
-        SplCloud().linenotify(msg)
         i += 1
 
 def check_db_sync():
