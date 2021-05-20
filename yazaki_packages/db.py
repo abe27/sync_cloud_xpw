@@ -67,6 +67,7 @@ class PsDb:
             pass
 
         cur.close()
+        conn.close()
         return True
 
 
@@ -91,13 +92,12 @@ class OraDB:
             else:
                 i = False
 
-            cur.close()
         except Exception as e:
             print(sql)
             print(str(e))
             DBLogging("ORA_DB" , f"ERROR FETCH ONE", str(e))
-            cur.close()
-
+        
+        cur.close()
         return i
 
     def get_fetch_all(self, sql):
@@ -137,6 +137,7 @@ class OraDB:
             pass
 
         cur.close()
+        conn.close()
         return f
 
 

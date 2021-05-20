@@ -4,7 +4,9 @@ from yazaki_packages.cloud import SplCloud
 
 def main():
     fname = os.listdir("./pdf")
-    print(fname)
+    for i in fname:
+        if i != ".gitkeep":
+            print(i)
 
 if __name__ == '__main__':
     main()
