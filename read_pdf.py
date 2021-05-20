@@ -13,17 +13,22 @@ def insert_db(obj):
         sql = f"""INSERT INTO TMP_ORDER(ITEM, PDS_NO, FROM_ETD_DATE, FROM_ETD_TIME, TO_ETD_DATE, TO_ETD_TIME, DEST_NAME, NAME_001, COMPANY_NAME, FROM_TAP, TAP_ROUND, PL_LIMIT, PL_NO, GROUP_NO, PAGE_NO, ACC_NO, DELIVERY_FROM_DATE, DELIVERY_FROM_TIME, DELIVERY_TO_DATE, DELIVERY_TO_TIME, PARTNO, TAG_CODE, TAG_NAME, STDPACK, CT, QTY,FILE_NAME,CHANGENO)
         VALUES({r['no']}, '{r['pds_no']}',to_date('{r['to_etd_date']}', 'DD/MM/YYYY'),'{r['to_etd_time']}',to_date('{r['from_etd_date']}', 'DD/MM/YYYY'),'{r['from_etd_time']}','{r['dest_name']}','{r['name_001']}','{r['comany_name']}','{r['from_tap']}','{r['tap_round']}','{r['pl_limit']}','{r['pl_no']}','{r['group_no']}','{r['page_no']}','{r['acc_no']}',to_date('{r['delivery_from_date']}', 'DD/MM/YY'),'{r['delivery_from_time']}',to_date('{r['delivery_to_date']}', 'DD/MM/YY'),'{r['delivery_to_time']}','{r['part_no']}','{r['part_tag_code']}','{r['part_tag_name']}','{r['part_stdpack']}','{r['part_ctn']}','{r['part_qty']}','{r['file_name']}','{r['part_change']}')"""
         if OraFG().get_fetch_one(f"select ITEM from TMP_ORDER where PDS_NO='{r['pds_no']}' and PARTNO='{r['part_no']}'") > 0:
-           sql = f"""UPDATE TMP_ORDER SET CT='{r['part_ctn']}', QTY='{r['part_qty']}', SYNC=0 WHERE PDS_NO='{r['pds_no']}' and PARTNO='{r['part_no']}'"""
-        
+            sql = f"""UPDATE TMP_ORDER SET CT='{r['part_ctn']}', QTY='{r['part_qty']}', SYNC=0 WHERE PDS_NO='{r['pds_no']}' and PARTNO='{r['part_no']}'"""
+
         OraFG().excute_data(sql)
     return
 
+
 def move_to_home(source_file, filename):
-    fname = os.getenv("HOME") + f"/GEDI/PDF/{datetime.datetime.now().strftime('%Y%m%d')}"
+    fname = os.getenv("HOME") + \
+        f"/GEDI/PDF/{datetime.datetime.now().strftime('%Y%m%d')}"
     if os.path.exists(fname) is False:
         os.makedirs(fname)
 
     shutil.move(source_file, fname + "/"+filename)
+    msg = f"UPLOAD {filename} COMPLETE."
+    # SplCloud().linenotify(msg)
+
 
 def main():
     fname = os.listdir("./pdf")
@@ -218,7 +223,6 @@ def main():
 
             pdfFileObject.close()
             move_to_home(f"./pdf/{i}", i)
-            
 
 
 if __name__ == '__main__':
