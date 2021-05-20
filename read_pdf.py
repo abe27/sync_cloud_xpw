@@ -35,6 +35,13 @@ def main():
                 delivery_to_date    = None
                 delivery_to_time    = None
 
+                part_no             = None
+                part_tag_code       = None
+                part_tag_name       = None
+                part_stdpack        = None
+                part_ctn            = None
+                part_qty            = None
+
                 doc = []
 
                 if os.path.exists(f"./temp/{i.replace('pdf', 'txt')}"):
@@ -104,46 +111,73 @@ def main():
                     if x == 32:
                         delivery_to_time    = r
 
-                    if x > 67:
-                        print(f"{j} ==> {r}")
-                        j += 1
-                        if j >= 5:
-                            j = 0
-                            print(f"========= end ========")
+                    elif x > 67:
+                        if r.find('TOTAL') < 0:
+                            if j == 0:
+                                part_no = r
+
+                            if j == 1:
+                                part_tag_code = r
+
+                            if j == 2:
+                                part_tag_name = r
+
+                            if j == 3:
+                                part_stdpack = r
+
+                            if j == 4:
+                                part_ctn = r
+
+                            if j == 5:
+                                part_qty = r
+
+                            j += 1
+                            if j >= 6:
+                                doc.append({
+                                    "no": len(doc) + 1,
+                                    "pds_no":pds_no,
+                                    "to_etd_date":to_etd_date,
+                                    "to_etd_time":to_etd_time,
+                                    "from_etd_date":from_etd_date,
+                                    "from_etd_time":from_etd_time,
+                                    "dest_name":dest_name,
+                                    "name_001":name_001,
+                                    "comany_name":comany_name,
+                                    "from_tap":from_tap,
+                                    "tap_round":tap_round,
+                                    "pl_limit":pl_limit,
+                                    "pl_no":pl_no,
+                                    "group_no":group_no,
+                                    "page_no":page_no,
+                                    "acc_no":acc_no,
+                                    "delivery_from_date":delivery_from_date,
+                                    "delivery_from_time":delivery_from_time,
+                                    "delivery_to_date":delivery_to_date,
+                                    "delivery_to_time":delivery_to_time,
+                                    "part_no": part_no,
+                                    "part_tag_code": part_tag_code,
+                                    "part_tag_name": part_tag_name,
+                                    "part_stdpack": part_stdpack,
+                                    "part_ctn": part_ctn,
+                                    "part_qty": part_qty,
+                                })
+                                j = 0
+                                part_no             = None
+                                part_tag_code       = None
+                                part_tag_name       = None
+                                part_stdpack        = None
+                                part_ctn            = None
+                                part_qty            = None
                     
 
 
                     f.write(txt)
                     x += 1
 
-                doc.append({
-                    "pds_no":pds_no,
-                    "to_etd_date":to_etd_date,
-                    "to_etd_time":to_etd_time,
-                    "from_etd_date":from_etd_date,
-                    "from_etd_time":from_etd_time,
-                    "dest_name":dest_name,
-                    "name_001":name_001,
-                    "comany_name":comany_name,
-                    "from_tap":from_tap,
-                    "tap_round":tap_round,
-                    "pl_limit":pl_limit,
-                    "pl_no":pl_no,
-                    "group_no":group_no,
-                    "page_no":page_no,
-                    "acc_no":acc_no,
-                    "delivery_from_date":delivery_from_date,
-                    "delivery_from_time":delivery_from_time,
-                    "delivery_to_date":delivery_to_date,
-                    "delivery_to_time":delivery_to_time,
-                    "part_detail": [],
-                })
-
-                print(list(doc))
-
                 f.close()
+                print(f"========= {i} ========")
+                print(list(doc))
                 
-
 if __name__ == '__main__':
     main()
     sys.exit(0)
