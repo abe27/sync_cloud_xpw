@@ -143,3 +143,4 @@ temp/**/**/*.txt
 GEDI/
 
 .vscode/
+*.pdf
