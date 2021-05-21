@@ -9,13 +9,26 @@ from yazaki_packages.db import OraFG
 
 
 def insert_db(obj):
+    i = 1
     for r in obj:
-        sql = f"""INSERT INTO TMP_ORDER(ITEM, PDS_NO, FROM_ETD_DATE, FROM_ETD_TIME, TO_ETD_DATE, TO_ETD_TIME, DEST_NAME, NAME_001, COMPANY_NAME, FROM_TAP, TAP_ROUND, PL_LIMIT, PL_NO, GROUP_NO, PAGE_NO, ACC_NO, DELIVERY_FROM_DATE, DELIVERY_FROM_TIME, DELIVERY_TO_DATE, DELIVERY_TO_TIME, PARTNO, TAG_CODE, TAG_NAME, STDPACK, CT, QTY,FILE_NAME,CHANGENO)
-        VALUES({r['no']}, '{r['pds_no']}',to_date('{r['to_etd_date']}', 'DD/MM/YYYY'),'{r['to_etd_time']}',to_date('{r['from_etd_date']}', 'DD/MM/YYYY'),'{r['from_etd_time']}','{r['dest_name']}','{r['name_001']}','{r['comany_name']}','{r['from_tap']}','{r['tap_round']}','{r['pl_limit']}','{r['pl_no']}','{r['group_no']}','{r['page_no']}','{r['acc_no']}',to_date('{r['delivery_from_date']}', 'DD/MM/YY'),'{r['delivery_from_time']}',to_date('{r['delivery_to_date']}', 'DD/MM/YY'),'{r['delivery_to_time']}','{r['part_no']}','{r['part_tag_code']}','{r['part_tag_name']}','{r['part_stdpack']}','{r['part_ctn']}','{r['part_qty']}','{r['file_name']}','{r['part_change']}')"""
-        if OraFG().get_fetch_one(f"select ITEM from TMP_ORDER where PDS_NO='{r['pds_no']}' and PARTNO='{r['part_no']}'") > 0:
-            sql = f"""UPDATE TMP_ORDER SET CT='{r['part_ctn']}', QTY='{r['part_qty']}', SYNC=0 WHERE PDS_NO='{r['pds_no']}' and PARTNO='{r['part_no']}'"""
+        arrival_from_date = f"null"
+        if len(r['arrival_from_date']) > 0:
+            arrival_from_date = f"to_date('{r['arrival_from_date']}','DD/MM/YY')"
 
+        departure_date = f"null"
+        if len(r['departure_date']) > 0:
+            departure_date = f"to_date('{r['departure_date']}', 'DD/MM/YY')"
+
+
+        sql = f"""INSERT INTO TMP_ORDER(ITEM, ARRIVAL_DATE, ARRIVAL_TIME, COLLECT_DATE, COLLECT_TIME, MAIN_ROUTE, DOCNO, SUPPLIER_NAME, SUPPLIER_CODE, ORDERNO, DOCKCODE, LAST_MAIN_ROUTE, LAST_, MIROSNO, SUPPLIER_PICKUP, TO_ARRIVAL_DATE, TO_ARRIVAL_TIME, DEPARTURE_DATE, DEPARTURE_TIME, PARTNO, CHANGENO, KANBANNO, ADDRESS, PACKQTY, ORDER_KBCT, QTY, FILE_NAME, SYSDTE, SYNC)
+        VALUES('{i}',to_date('{r['arrival_date']}', 'DD/MM/YYYY'),'{r['arrival_time']}',to_date('{r['collect_date']}','DD/MM/YYYY'),'{r['collect_time']}','{r['main_route_no']}','{r['pds_no']}','{r['supplier_name']}','{r['supplier_code']}','{r['order_no']}','{r['dock_code']}','{r['main_route_no']}','{r['last_no']}','{r['mros_no']}','{r['supp_pick_no']}',{arrival_from_date},'{r['arrival_from_time']}',{departure_date},'{r['departure_time']}','{r['part_no']}','{r['part_change']}','{r['kanban_no']}','{r['addess']}','{r['part_stdpack']}','{r['part_ctn']}','{r['part_qty']}','{r['file_name']}',current_timestamp, 0)"""
+        
+        if OraFG().get_fetch_one(f"SELECT ITEM FROM TMP_ORDER WHERE DOCNO='{r['pds_no']}' and ORDERNO='{r['order_no']}' and PARTNO='{r['part_no']}'") > 0:
+            sql = f"""UPDATE TMP_ORDER SET ITEM={i},ORDER_KBCT='{r['part_ctn']}', QTY='{r['part_qty']}', SYNC=0 WHERE DOCNO='{r['pds_no']}' and ORDERNO='{r['order_no']}' and PARTNO='{r['part_no']}'"""
+        
         OraFG().excute_data(sql)
+        i += 1
+        
     return
 
 
@@ -72,13 +85,14 @@ def main():
 
                 doc = []
 
-                # if os.path.exists(f"./temp/{i.replace('pdf', 'txt')}"):
-                #     os.remove(f"./temp/{i.replace('pdf', 'txt')}")
+                txt_name = f"./temp/pages-{j}-{i.replace('pdf', 'txt')}"
+                # if os.path.exists(txt_name):
+                #     os.remove(txt_name)
 
-                # f = open(f"./temp/{i.replace('pdf', 'txt')}", "a+")
+                # f = open(txt_name, "a+")
 
                 num_line = 67
-                j = 0
+                p = 0
                 x = 0
                 for r in data:
                     r = str(r).strip()
@@ -143,7 +157,11 @@ def main():
 
                     if x == 33:
                         if r.find("REPRINT") < 0:
-                            num_line = 65
+                            if len(r) == 14:
+                                num_line = 32
+
+                            else:
+                                num_line = 65
 
                     # fixed_part = True
                     # if len(r) == 18:
@@ -151,29 +169,32 @@ def main():
 
                     if x > num_line:
                         if r.find('TOTAL') < 0:
-                            if j == 0:
+                            if p == 0:
                                 part_no = r
-                                if len(r) == 18:
+                                # if len(r) >= 14:
+                                #     part_no = r[:11]
+                                #     part_change = r[12:]
+                                if len(r) >= 18:
                                     part_no = r[:14]
                                     part_change = r[15:]
 
-                            if j == 1:
+                            if p == 1:
                                 part_tag_code = r
 
-                            if j == 2:
+                            if p == 2:
                                 part_tag_name = r
 
-                            if j == 3:
+                            if p == 3:
                                 part_stdpack = r
 
-                            if j == 4:
+                            if p == 4:
                                 part_ctn = r
 
-                            if j == 5:
+                            if p == 5:
                                 part_qty = r
 
-                            j += 1
-                            if j >= 6:
+                            p += 1
+                            if p >= 6:
                                 doc.append({
                                     "no": len(doc) + 1,
                                     "pds_no": pds_no,
@@ -203,8 +224,10 @@ def main():
                                     "part_ctn": part_ctn,
                                     "part_qty": part_qty,
                                     "file_name": i,
+                                    "pages": j,
+                                    "filename": txt_name
                                 })
-                                j = 0
+                                p = 0
                                 part_no = ""
                                 part_change = ""
                                 part_tag_code = ""
@@ -214,11 +237,12 @@ def main():
                                 part_qty = ""
 
                     # f.write(txt)
-                    print(txt)
+                    # print(txt)
                     x += 1
 
                 # f.close()
-                print(f"========= {i} ========")
+                print(f"========= {txt_name} ==> {i} ::: PAGE => {j} ========")
+                # print(doc)
                 insert_db(doc)
 
             pdfFileObject.close()
