@@ -26,9 +26,10 @@ def main():
         for j in body:
             rvno = OraDB().get_fetch_one(f"(select 'BD'|| TO_CHAR(sysdate,'yyMMdd') || replace(to_char(emp_TXP__RCMANGENO_CK2.nextval,'00099'),' ','') as genrunno  from dual)")
             print(f"{rvno} => {list(j)}")
+            partname = str(j[7]).replace("'", "''")
             sql_rec_body = (f"""INSERT INTO TXP_RECTRANSBODY
                                 (RECEIVINGKEY, RECEIVINGSEQ, PARTNO, PLNQTY, PLNCTN,RECQTY,RECCTN,TAGRP, UNIT, CD, WHS, DESCRI, RVMANAGINGNO,UPDDTE, SYSDTE, CREATEDBY,MODIFIEDBY,OLDERKEY)
-                                VALUES('{j[0]}', '{x}', '{j[1]}', {j[2]}, {j[3]},0,0,'C', '{j[4]}','{j[5]}' , '{j[6]}','{j[7]}', '{rvno}',sysdate, sysdate, 'SKTSYS', 'SKTSYS', '{str(i[1]).strip()}')""")
+                                VALUES('{j[0]}', '{x}', '{j[1]}', {j[2]}, {j[3]},0,0,'C', '{j[4]}','{j[5]}' , '{j[6]}','{partname}', '{rvno}',sysdate, sysdate, 'SKTSYS', 'SKTSYS', '{str(i[1]).strip()}')""")
             plnctn += int(str(j[3]))
             rec_tag = str(j[6])
             cur.execute(sql_rec_body)
@@ -47,7 +48,11 @@ def main():
         print(f"DELETE TMP_RECEIVEMERGE ID => '{str(i[0])}'")
         ora.commit()
 
-        msg = f"TEST MERGE RECEIVE({rec_tag})\nRECEIVENO: {str(i[2]).strip()}\nITEM: {len(body)} CTN: {plnctn}\nFROM: {receive_key}\nAT: {datetime.now().strftime('%Y-%m-%d %X')}"
+        keys = []
+        for c in str(i[1]).strip().split(","):
+            keys.append(str(c)[len("TI20210517"):])
+
+        msg = f"MERGE RECEIVE({rec_tag})\nRECEIVENO: {str(i[2]).strip()}\nITEM: {len(body)} CTN: {plnctn}\nFROM: {str(keys).replace('[', '').replace(']', '')}\nAT: {datetime.now().strftime('%Y-%m-%d %X')}"
         SplCloud().linenotify(msg)
 
     cur.close()
