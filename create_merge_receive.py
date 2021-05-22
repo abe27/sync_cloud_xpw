@@ -15,7 +15,7 @@ def main():
     cur.execute(f"SELECT ID,KEY,REC_NO FROM TMP_RECEIVEMERGE WHERE SYNC=0")
     obj = cur.fetchall()
     for i in obj:
-        receive_key = str(str(i[1]).strip().split(",")).replace("[", "").replace("]", "")
+        receive_key = str(str(i[1]).strip().split(",")).replace("[", "").replace("]", "").replace(" ", "")
         sql_body = f"""SELECT '{str(i[2]).strip()}' RECENO, PARTNO,sum(PLNQTY) qty,sum(PLNCTN) ctn,UNIT,CD,WHS,DESCRI FROM TXP_RECTRANSBODY WHERE RECEIVINGKEY IN ({receive_key}) GROUP BY PARTNO,UNIT,CD,WHS,DESCRI ORDER BY PARTNO"""
         cur.execute(sql_body)
         body = cur.fetchall()
@@ -47,10 +47,6 @@ def main():
         cur.execute(f"DELETE TMP_RECEIVEMERGE WHERE ID='{str(i[0])}'")
         print(f"DELETE TMP_RECEIVEMERGE ID => '{str(i[0])}'")
         ora.commit()
-
-        keys = []
-        for c in str(i[1]).strip().split(","):
-            keys.append(str(str(c).strip())[len("TI20210517"):])
 
         msg = f"MERGE RECEIVE({rec_tag})\nRECEIVENO: {str(i[2]).strip()}\nITEM: {len(body)} CTN: {plnctn}\nFROM: {str(keys).replace('[', '').replace(']', '')}\nAT: {datetime.now().strftime('%Y-%m-%d %X')}"
         SplCloud().linenotify(msg)
