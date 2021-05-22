@@ -50,7 +50,7 @@ def main():
 
         keys = []
         for c in str(i[1]).strip().split(","):
-            keys.append(str(c)[len("TI20210517"):])
+            keys.append(str(str(c).strip())[len("TI20210517"):])
 
         msg = f"MERGE RECEIVE({rec_tag})\nRECEIVENO: {str(i[2]).strip()}\nITEM: {len(body)} CTN: {plnctn}\nFROM: {str(keys).replace('[', '').replace(']', '')}\nAT: {datetime.now().strftime('%Y-%m-%d %X')}"
         SplCloud().linenotify(msg)
