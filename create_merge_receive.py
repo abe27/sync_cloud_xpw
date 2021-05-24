@@ -51,6 +51,12 @@ def main():
         print(f"DELETE TMP_RECEIVEMERGE ID => '{str(i[0])}'")
         ora.commit()
 
+        rnd = str(i[1]).strip().split(",")
+        keys = []
+        for b in rnd:
+            n = str(b).strip().replace(" ", "")
+            keys.append(n[len("TI20210524"):])
+
         msg = f"MERGE RECEIVE({rec_tag})\nRECEIVENO: {str(i[2]).strip()}\nITEM: {len(body)} CTN: {plnctn}\nFROM: {str(keys).replace('[', '').replace(']', '')}\nAT: {datetime.now().strftime('%Y-%m-%d %X')}"
         SplCloud().linenotify(msg)
 
