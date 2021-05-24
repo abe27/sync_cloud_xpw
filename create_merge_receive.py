@@ -18,6 +18,16 @@ def main():
     cur.execute(f"SELECT ID,KEY,REC_NO FROM TMP_RECEIVEMERGE WHERE SYNC=0")
     obj = cur.fetchall()
     for i in obj:
+        # get rnd number
+        rnd = str(i[1]).strip().split(",")
+        keys = []
+        for b in rnd:
+            n = str(b).strip().replace(" ", "")
+            keys.append(n[len("TI20210524"):])
+
+        xkeys = str(keys).replace('[', '').replace(']', '').replace("'", "")
+        # end
+
         receive_key = str(str(i[1]).strip().split(",")).replace("[", "").replace("]", "").replace(" ", "")
         sql_body = f"""SELECT '{str(i[2]).strip()}' RECENO, PARTNO,sum(PLNQTY) qty,sum(PLNCTN) ctn,UNIT,CD,WHS,DESCRI FROM TXP_RECTRANSBODY WHERE RECEIVINGKEY IN ({receive_key}) GROUP BY PARTNO,UNIT,CD,WHS,DESCRI ORDER BY PARTNO"""
         cur.execute(sql_body)
@@ -32,7 +42,7 @@ def main():
             partname = str(j[7]).replace("'", "''")
             sql_rec_body = (f"""INSERT INTO TXP_RECTRANSBODY
                                 (RECEIVINGKEY, RECEIVINGSEQ, PARTNO, PLNQTY, PLNCTN,RECQTY,RECCTN,TAGRP, UNIT, CD, WHS, DESCRI, RVMANAGINGNO,UPDDTE, SYSDTE, CREATEDBY,MODIFIEDBY,OLDERKEY)
-                                VALUES('{j[0]}', '{x}', '{j[1]}', {j[2]}, {j[3]},0,0,'C', '{j[4]}','{j[5]}' , '{j[6]}','{partname}', '{rvno}',sysdate, sysdate, 'SKTSYS', 'SKTSYS', '{str(i[1]).strip()}')""")
+                                VALUES('{j[0]}', '{x}', '{j[1]}', {j[2]}, {j[3]},0,0,'C', '{j[4]}','{j[5]}' , '{j[6]}','{partname}', '{rvno}',sysdate, sysdate, 'SKTSYS', 'SKTSYS', '{xkeys}')""")
             plnctn += int(str(j[3]))
             rec_tag = str(j[6])
             cur.execute(sql_rec_body)
@@ -51,13 +61,7 @@ def main():
         print(f"DELETE TMP_RECEIVEMERGE ID => '{str(i[0])}'")
         ora.commit()
 
-        rnd = str(i[1]).strip().split(",")
-        keys = []
-        for b in rnd:
-            n = str(b).strip().replace(" ", "")
-            keys.append(n[len("TI20210524"):])
-
-        msg = f"MERGE RECEIVE({rec_tag})\nRECEIVENO: {str(i[2]).strip()}\nITEM: {len(body)} CTN: {plnctn}\nFROM: {str(keys).replace('[', '').replace(']', '')}\nAT: {datetime.now().strftime('%Y-%m-%d %X')}"
+        msg = f"MERGE RECEIVE({rec_tag})\nRECEIVENO: {str(i[2]).strip()}\nITEM: {len(body)} CTN: {plnctn}\nFROM: {xkeys}\nAT: {datetime.now().strftime('%Y-%m-%d %X')}"
         SplCloud().linenotify(msg)
 
     cur.close()
