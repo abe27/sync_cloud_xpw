@@ -23,9 +23,14 @@ def main():
         keys = []
         for b in rnd:
             n = str(b).strip().replace(" ", "")
-            keys.append(n[len("TI20210524"):])
+            keys.append(int(n[len("TI20210524"):]))
 
         xkeys = str(keys).replace('[', '').replace(']', '').replace("'", "")
+
+        # strings = [str(integer) for integer in keys]
+        # a_string = "".join(strings)
+        # an_integer = int(a_string)
+        # rkeys = str(str(i[2]).strip())[:2] + "{:08d}".format(an_integer)
         # end
 
         receive_key = str(str(i[1]).strip().split(",")).replace("[", "").replace("]", "").replace(" ", "")
