@@ -66,8 +66,9 @@ def main():
         print(f"DELETE TMP_RECEIVEMERGE ID => '{str(i[0])}'")
         ora.commit()
 
-        msg = f"MERGE RECEIVE({rec_tag})\nRECEIVENO: {str(i[2]).strip()}\nITEM: {len(body)} CTN: {plnctn}\nFROM: {xkeys}\nAT: {datetime.now().strftime('%Y-%m-%d %X')}"
-        SplCloud().linenotify(msg)
+        if len(body) > 0:
+            msg = f"MERGE RECEIVE({rec_tag})\nRECEIVENO: {str(i[2]).strip()}\nITEM: {len(body)} CTN: {plnctn}\nFROM: {xkeys}\nAT: {datetime.now().strftime('%Y-%m-%d %X')}"
+            SplCloud().linenotify(msg)
 
     cur.close()
     ora.close()
