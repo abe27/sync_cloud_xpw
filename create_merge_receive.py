@@ -5,8 +5,11 @@ import pathlib
 from datetime import datetime
 from yazaki_packages.db import OraDB
 from yazaki_packages.cloud import SplCloud
+
 from dotenv import load_dotenv
-env_path = f'{pathlib.Path().absolute()}/.env'
+app_path = f'{pathlib.Path().absolute()}'
+# app_path = f"/home/seiwa/webservice/sync_service"
+env_path = f"{app_path}/.env"
 load_dotenv(env_path)
 
 def main():
