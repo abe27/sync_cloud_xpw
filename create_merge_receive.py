@@ -12,6 +12,16 @@ app_path = f'{pathlib.Path().absolute()}'
 env_path = f"{app_path}/.env"
 load_dotenv(env_path)
 
+def get_new_receive(keys):
+    num_key = f"M{keys[1:2]}{keys[4:10]}"
+    ora = o.connect(os.getenv("ORA_STR"))
+    cur = ora.cursor()
+    cur.execute(f"SELECT count(*) + 1 FROM TXP_RECTRANSENT WHERE RECEIVINGKEY LIKE '{num_key}%'")
+    obj = cur.fetchone()
+    rec_no = num_key + str('{:03d}'.format(obj[0]))
+    return rec_no
+
+
 def main():
     ora = o.connect(os.getenv("ORA_STR"))
     cur = ora.cursor()
@@ -26,7 +36,7 @@ def main():
             keys.append(int(n[len("TI20210524"):]))
 
         xkeys = str(keys).replace('[', '').replace(']', '').replace("'", "")
-
+        nkeys = get_new_receive(rnd[0])
         # strings = [str(integer) for integer in keys]
         # a_string = "".join(strings)
         # an_integer = int(a_string)
@@ -34,7 +44,7 @@ def main():
         # end
 
         receive_key = str(str(i[1]).strip().split(",")).replace("[", "").replace("]", "").replace(" ", "")
-        sql_body = f"""SELECT '{str(i[2]).strip()}' RECENO, PARTNO,sum(PLNQTY) qty,sum(PLNCTN) ctn,UNIT,CD,WHS,DESCRI FROM TXP_RECTRANSBODY WHERE RECEIVINGKEY IN ({receive_key}) GROUP BY PARTNO,UNIT,CD,WHS,DESCRI ORDER BY PARTNO"""
+        sql_body = f"""SELECT '{nkeys}' RECENO, PARTNO,sum(PLNQTY) qty,sum(PLNCTN) ctn,UNIT,CD,WHS,DESCRI FROM TXP_RECTRANSBODY WHERE RECEIVINGKEY IN ({receive_key}) GROUP BY PARTNO,UNIT,CD,WHS,DESCRI ORDER BY PARTNO"""
         cur.execute(sql_body)
         body = cur.fetchall()
         if len(body) > 0:
@@ -66,7 +76,7 @@ def main():
         print(f"DELETE TMP_RECEIVEMERGE ID => '{str(i[0])}'")
         ora.commit()
         if len(body) > 0:
-            msg = f"MERGE RECEIVE({rec_tag})\nRECEIVENO: {str(i[2]).strip()}\nITEM: {len(body)} CTN: {plnctn}\nFROM: {xkeys}\nAT: {datetime.now().strftime('%Y-%m-%d %X')}"
+            msg = f"MERGE RECEIVE({rec_tag})\nRECEIVENO: {nkeys}\nITEM: {len(body)} CTN: {plnctn}\nFROM: {xkeys}\nAT: {datetime.now().strftime('%Y-%m-%d %X')}"
             SplCloud().linenotify(msg)
 
     cur.close()
